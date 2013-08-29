@@ -32,10 +32,18 @@ npm install -g htmlclean
 ## Usage
 
 ```js
-cleanHtml = require('htmlclean')(sourceHtml);
+cleanHtml = htmlclean(sourceHtml[, options])
 ```
 
 `require('htmlclean')` returns a Function. This Function accepts source HTML, and returns clean HTML. If you want, you can specify option to second argument.
+
+```js
+var htmlclean = require('htmlclean');
+html = htmlclean(html);
+
+// Or
+html = require('htmlclean')(html);
+```
 
 ### Options
 You can specify option Object to second argument. This Object can have following properties.
