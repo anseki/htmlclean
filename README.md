@@ -9,9 +9,25 @@ Those configuring are a little pain in the neck for me. And the results was not 
 htmlclean removes the following texts.
 
 + The leading whitespaces, tabs and line-breaks, and the trailing whitespaces, tabs and line-breaks.
-+ The tabs and line-breaks (not whitespaces) between HTML tags.
++ The unneeded whitespaces, tabs and line-breaks between HTML tags.
 + The more than two whitespaces, tabs and line-breaks (suppressed to one space).
 + HTML comments.
+
+The more than two whitespaces in a line that includes HTML tags are suppressed.
+
+**Example:**
+
+Before
+
+```html
+<p>The <strong> clean <span> <em> HTML is here. </em> </span> </strong> </p>
+```
+
+After
+
+```html
+<p>The <strong>clean <span><em>HTML is here.</em></span></strong></p>
+```
 
 ## Protecting
 The following texts are protected (excluded from removing).
@@ -91,6 +107,23 @@ whitespaces,	tabs and
  		
  		will be suppressed to one space.</p>
 
+    <p>
+        <em>
+            <i>
+            The
+            </i>
+            <font>
+                <i>
+                clean
+                </i>
+                HTML
+            </font>
+        </em>
+        is here.
+    </p>
+<p>The <strong> clean <span> <em> HTML is here. </em> </span> </strong> </p>
+
+
 <script>
 var foo =    'The text in    script element' +
 					' will be		kept.';
@@ -124,7 +157,7 @@ text will     be kept.<!--[/htmlclean-protect]--></div>
 `after1.html`
 
 ```html
-<html><body><!--[if lt IE 7]>This line will be kept.<![endif]--><p>The more than two whitespaces, tabs and line-breaks will be suppressed to one space.</p><script>
+<html><body><!--[if lt IE 7]>This line will be kept.<![endif]--><p>The more than two whitespaces, tabs and line-breaks will be suppressed to one space.</p><p> <em><i>The</i> <font><i>clean</i> HTML</font></em> is here.</p><p>The <strong>clean <span><em>HTML is here.</em></span></strong></p><script>
 var foo =    'The text in    script element' +
 					' will be		kept.';
 </script><div title="The whitespaces before 'title' will be suppressed to one space. This  text     will be 
@@ -135,7 +168,7 @@ text will     be kept.</div><div></div><div></div><div title="This egg is protec
 `after2.html`
 
 ```html
-<html><body><!--[if lt IE 7]>This line will be kept.<![endif]--><p>The more than two whitespaces, tabs and line-breaks will be suppressed to one space.</p><script>
+<html><body><!--[if lt IE 7]>This line will be kept.<![endif]--><p>The more than two whitespaces, tabs and line-breaks will be suppressed to one space.</p><p> <em><i>The</i> <font><i>clean</i> HTML</font></em> is here.</p><p>The <strong>clean <span><em>HTML is here.</em></span></strong></p><script>
 var foo =    'The text in    script element' +
 					' will be		kept.';
 </script><div title="The whitespaces before 'title' will be suppressed to one space. This  text     will be 
@@ -144,4 +177,5 @@ text will     be kept.</div><div><!--%fooTemplate-head%--></div><div><!--%fooTem
 ```
 
 ## Release History
+ * 2013-11-06			v2.0.0			Change logic of handling whitespaces and others.
  * 2013-08-27			v0.1.0			Initial release.
