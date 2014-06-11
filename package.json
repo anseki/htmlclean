@@ -1,7 +1,7 @@
 {
   "name": "htmlclean",
   "description": "Simple and lightweight cleaner for HTML that just removes unneeded whitespaces, line-breaks, comments, etc.",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "homepage": "https://github.com/anseki/htmlclean",
   "author": {
     "name": "anseki"
