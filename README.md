@@ -149,7 +149,7 @@ text will     be kept.<!--[/htmlclean-protect]--></div>
 <div><!--%fooTemplate-head%--></div>
 <div><!--%fooTemplate-content%--></div>
 
-<div title="This egg is protected.">This Eggs are unprotected.</div>
+<div title="This egg is protected.">These Eggs are unprotected.</div>
 
 </body>
 <!-- The whitespaces, tabs and line-breaks after html close-tag will be removed. And this tag too. -->
@@ -167,7 +167,7 @@ var foo =    'The text in    script element' +
 					' will be		kept.';
 </script><div title="The whitespaces before 'title' will be suppressed to one space. This  text     will be 
 kept.">The tabs and</div><div>line-breaks between HTML tags will be removed.</div><div><span>'</span> <span>'</span> is one space(this will be kept).</div><div><!--#echo var="LAST_MODIFIED" -->Apache SSI tag will be kept.</div><div>Here, 
-text will     be kept.</div><div></div><div></div><div title="This egg is protected.">This Eggs are unprotected.</div></body></html>
+text will     be kept.</div><div></div><div></div><div title="This egg is protected.">These Eggs are unprotected.</div></body></html>
 ```
 
 `after2.html`
@@ -178,7 +178,7 @@ var foo =    'The text in    script element' +
 					' will be		kept.';
 </script><div title="The whitespaces before 'title' will be suppressed to one space. This  text     will be 
 kept.">The tabs and</div><div>line-breaks between HTML tags will be removed.</div><div><span>'</span> <span>'</span> is one space(this will be kept).</div><div><!--#echo var="LAST_MODIFIED" -->Apache SSI tag will be kept.</div><div>Here, 
-text will     be kept.</div><div><!--%fooTemplate-head%--></div><div><!--%fooTemplate-content%--></div><div title="This egg is protected.">This omelets are unprotected.</div></body></html>
+text will     be kept.</div><div><!--%fooTemplate-head%--></div><div><!--%fooTemplate-content%--></div><div title="This egg is protected.">These omelets are unprotected.</div></body></html>
 ```
 
 ## Release History
