@@ -67,6 +67,19 @@ You can specify option Object to second argument. This Object can have following
 + <strong>`protect` Type: RegExp or Array</strong>  
 The texts which are matched to this RegExp are protected in addition to above "Protecting" list. The multiple RegExps can be specified via Array.
 
++ <strong>`unprotect` Type: RegExp or Array</strong>  
+The texts which are matched to this RegExp are cleaned even if the text is included in above "Protecting" list. The multiple RegExps can be specified via Array.  
+For example, some [Template-Engines](http://garann.github.io/template-chooser/) (e.g. [Handlebars.js](http://handlebarsjs.com/), [JsRender](http://borismoore.github.com/jsrender/demos/index.html), etc.) accept HTML as template via `<script>` tag that has a `type` attribute. (e.g. `<script type="text/x-handlebars-template">`)  
+This template HTML is cleaned via following.
+
+```js
+html = htmlclean(html, {
+  unprotect: /<script [^>]*\btype="text\/x-handlebars-template"[\s\S]+?<\/script>/ig
+});
+```
+
+*NOTE:* The RegExp has to match to text which is not a part of protected text. For example, the RegExp matches `color: red;` in `<style>` element, but this is not cleaned because all texts in the `<style>` element are protected. (`color: red;` is a part of protected text.) The RegExp has to match to text which is all of `<style>` element like `/<style[\s\S]+?<\/style>/`.
+
 + <strong>`edit` Type: Function</strong>  
 This Function more edit HTML.  
 The protected texts are hidden from HTML, and HTML is passed to this Function. Therefore, this Function doesn't break protected texts. The HTML which returned from this Function is restored.  
@@ -84,6 +97,7 @@ fs.writeFileSync('./after1.html', htmlAfter1);
 
 var htmlAfter2 = htmlclean(htmlBefore, {
   protect: /<\!--%fooTemplate\b.*?%-->/g,
+  unprotect: /<script [^>]*\btype="text\/x-handlebars-template"[\s\S]+?<\/script>/ig,
   edit: function(html) { return html.replace(/\begg(s?)\b/ig, 'omelet$1'); }
 });
 fs.writeFileSync('./after2.html', htmlAfter2);
@@ -134,6 +148,14 @@ var foo =    'The text in    script element' +
 					' will be		kept.';
 </script>
 
+<script type="text/x-handlebars-template">
+  <!-- These are unprotected by option -->
+  <div>
+    <div>{{firstName}}</div>
+    <div>{{lastName}}</div>
+  </div>
+</script>
+
 <div    title="The whitespaces before 'title' will be suppressed to one space. This  text     will be 
 kept.">The tabs and</div>
 	<div>line-breaks between HTML tags will be removed.</div>
@@ -165,6 +187,12 @@ text will     be kept.<!--[/htmlclean-protect]--></div>
 <html><body><!--[if lt IE 7]>This line will be kept.<![endif]--><p>The more than two whitespaces, tabs and line-breaks will be suppressed to one space.</p><p> <em><i>The</i> <font><i>clean</i> HTML</font></em> is here.</p><p>The <strong>clean <span><em>HTML is here.</em></span></strong></p><script>
 var foo =    'The text in    script element' +
 					' will be		kept.';
+</script><script type="text/x-handlebars-template">
+  <!-- These are unprotected by option -->
+  <div>
+    <div>{{firstName}}</div>
+    <div>{{lastName}}</div>
+  </div>
 </script><div title="The whitespaces before 'title' will be suppressed to one space. This  text     will be 
 kept.">The tabs and</div><div>line-breaks between HTML tags will be removed.</div><div><span>'</span> <span>'</span> is one space(this will be kept).</div><div><!--#echo var="LAST_MODIFIED" -->Apache SSI tag will be kept.</div><div>Here, 
 text will     be kept.</div><div></div><div></div><div title="This egg is protected.">These Eggs are unprotected.</div></body></html>
@@ -176,12 +204,13 @@ text will     be kept.</div><div></div><div></div><div title="This egg is protec
 <html><body><!--[if lt IE 7]>This line will be kept.<![endif]--><p>The more than two whitespaces, tabs and line-breaks will be suppressed to one space.</p><p> <em><i>The</i> <font><i>clean</i> HTML</font></em> is here.</p><p>The <strong>clean <span><em>HTML is here.</em></span></strong></p><script>
 var foo =    'The text in    script element' +
 					' will be		kept.';
-</script><div title="The whitespaces before 'title' will be suppressed to one space. This  text     will be 
+</script><script type="text/x-handlebars-template"><div><div>{{firstName}}</div><div>{{lastName}}</div></div></script><div title="The whitespaces before 'title' will be suppressed to one space. This  text     will be 
 kept.">The tabs and</div><div>line-breaks between HTML tags will be removed.</div><div><span>'</span> <span>'</span> is one space(this will be kept).</div><div><!--#echo var="LAST_MODIFIED" -->Apache SSI tag will be kept.</div><div>Here, 
 text will     be kept.</div><div><!--%fooTemplate-head%--></div><div><!--%fooTemplate-content%--></div><div title="This egg is protected.">These omelets are unprotected.</div></body></html>
 ```
 
 ## Release History
+ * 2014-06-15			v2.1.0			Add `unprotect` option.
  * 2014-06-14			v2.0.2			Add `<!-->`, `<!--<![` and others to protected texts.
  * 2014-06-11			v2.0.1			Fix: Comment tags that include other tags are not removed.
  * 2013-11-06			v2.0.0			Change logic of handling whitespaces and others.
