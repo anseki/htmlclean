@@ -182,6 +182,7 @@ text will     be kept.</div><div><!--%fooTemplate-head%--></div><div><!--%fooTem
 ```
 
 ## Release History
+ * 2014-06-14			v2.0.2			Add `<!-->`, `<!--<![` and others to protected texts.
  * 2014-06-11			v2.0.1			Fix: Comment tags that include other tags are not removed.
  * 2013-11-06			v2.0.0			Change logic of handling whitespaces and others.
  * 2013-08-27			v0.1.0			Initial release.
