@@ -69,8 +69,7 @@ The texts which are matched to this RegExp are protected in addition to above "P
 
 + <strong>`unprotect` Type: RegExp or Array</strong>  
 The texts which are matched to this RegExp are cleaned even if the text is included in above "Protecting" list. The multiple RegExps can be specified via Array.  
-For example, some [Template-Engines](http://garann.github.io/template-chooser/) (e.g. [Handlebars.js](http://handlebarsjs.com/), [JsRender](http://borismoore.github.com/jsrender/demos/index.html), etc.) accept HTML as template via `<script>` tag that has a `type` attribute. (e.g. `<script type="text/x-handlebars-template">`)  
-This template HTML is cleaned via following.
+For example, HTML as template in `<script type="text/x-handlebars-template">` is cleaned via following.
 
 ```js
 html = htmlclean(html, {
@@ -210,6 +209,7 @@ text will     be kept.</div><div><!--%fooTemplate-head%--></div><div><!--%fooTem
 ```
 
 ## Release History
+ * 2014-06-15			v2.1.1			Restoration accepts nested saved texts.
  * 2014-06-15			v2.1.0			Add `unprotect` option.
  * 2014-06-14			v2.0.2			Add `<!-->`, `<!--<![` and others to protected texts.
  * 2014-06-11			v2.0.1			Fix: Comment tags that include other tags are not removed.
