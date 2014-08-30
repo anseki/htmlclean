@@ -210,9 +210,9 @@ text will     be kept.</div><div><!--%fooTemplate-head%--></div><div><!--%fooTem
 
 ## Note
 
-### Malformed Nesting Tags, and Close Tags in Script
+### Malformed Nested Tags, and Close Tags in Script
 
-htmlclean can't parse malformed nesting tags like `<p>foo<pre>bar</p>baz</pre>` precisely. And close tags in script like `<script>var foo = '</script>';</script>` too. Or, `?>` in PHP code, etc.  
+htmlclean can't parse malformed nested tags like `<p>foo<pre>bar</p>baz</pre>` precisely. And close tags in script like `<script>var foo = '</script>';</script>` too. Or, `?>` in PHP code, etc.  
 Some language parser also mistake, then those recommend us to write code like `'<' + '/script>'`. This is better even if htmlclean is not used.
 
 ### SSI Tags in HTML Comments
