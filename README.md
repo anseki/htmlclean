@@ -34,7 +34,7 @@ The following texts are protected (excluded from removing).
 
 + The texts in `textarea`, `script` and `style` elements, and text nodes in `pre` elements.
 + The quoted texts in tag attribute.
-+ Apache SSI tags.
++ SSI tags (PHP, JSP, ASP/ASP.NET, Apache SSI).
 + IE conditional comments. e.g. `<!--[if lt IE 7]>`
 + The texts between `<!--[htmlclean-protect]-->` and `<!--[/htmlclean-protect]-->`.
 + The texts that is matched by `protect` option (see "Options").
@@ -208,7 +208,28 @@ kept.">The tabs and</div><div>line-breaks between HTML tags will be removed.</di
 text will     be kept.</div><div><!--%fooTemplate-head%--></div><div><!--%fooTemplate-content%--></div><div title="This egg is protected.">These omelets are unprotected.</div></body></html>
 ```
 
+## Note
+
+### Malformed Nesting Tags, and Close Tags in Script
+
+htmlclean can't parse malformed nesting tags like `<p>foo<pre>bar</p>baz</pre>` precisely. And close tags in script too.  
+For example:
+
+```html
+<script>
+  var foo = '</script>';
+</script>
+```
+
+Or, `?>` in PHP code, etc.  
+Some language parser also mistake, then those recommend us to write code like `'<' + '/script>'`. This is better even if htmlclean is not used.
+
+### SSI Tags in HTML Comments
+
+htmlclean removes HTML comments that include SSI tag like `<!-- Info for admin - Foo:<?= expression ?> -->`. I think it's no problem because htmlclean is used to minify HTML. If that SSI tag include important code for logic, use a `protect` option, or `<!--[htmlclean-protect]-->` and `<!--[/htmlclean-protect]-->`.
+
 ## Release History
+ * 2014-08-30     v2.2.0      Add more SSI tags (PHP, etc.) to protection.
  * 2014-06-15			v2.1.1			Restoration accepts nested saved texts.
  * 2014-06-15			v2.1.0			Add `unprotect` option.
  * 2014-06-14			v2.0.2			Add `<!-->`, `<!--<![` and others to protected texts.
