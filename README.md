@@ -34,7 +34,7 @@ The following texts are protected (excluded from removing).
 
 + The texts in `textarea`, `script` and `style` elements, and text nodes in `pre` elements.
 + The quoted texts in tag attribute.
-+ SSI tags (PHP, JSP, ASP/ASP.NET, Apache SSI).
++ The texts as SSI tags (PHP, JSP, ASP/ASP.NET, Apache SSI).
 + IE conditional comments. e.g. `<!--[if lt IE 7]>`
 + The texts between `<!--[htmlclean-protect]-->` and `<!--[/htmlclean-protect]-->`.
 + The texts that is matched by `protect` option (see "Options").
@@ -212,16 +212,7 @@ text will     be kept.</div><div><!--%fooTemplate-head%--></div><div><!--%fooTem
 
 ### Malformed Nesting Tags, and Close Tags in Script
 
-htmlclean can't parse malformed nesting tags like `<p>foo<pre>bar</p>baz</pre>` precisely. And close tags in script too.  
-For example:
-
-```html
-<script>
-  var foo = '</script>';
-</script>
-```
-
-Or, `?>` in PHP code, etc.  
+htmlclean can't parse malformed nesting tags like `<p>foo<pre>bar</p>baz</pre>` precisely. And close tags in script like `<script>var foo = '</script>';</script>` too. Or, `?>` in PHP code, etc.  
 Some language parser also mistake, then those recommend us to write code like `'<' + '/script>'`. This is better even if htmlclean is not used.
 
 ### SSI Tags in HTML Comments
