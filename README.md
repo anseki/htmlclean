@@ -220,7 +220,7 @@ Some language parser also mistake, then those recommend us to write code like `'
 
 ### SSI Tags in HTML Comments
 
-htmlclean removes HTML comments that include SSI tag like `<!-- Info for admin - Foo:<?= expression ?> -->`. I think it's no problem because htmlclean is used to minify HTML. If that SSI tag include important code for logic, use a `protect` option, or `<!--[htmlclean-protect]-->` and `<!--[/htmlclean-protect]-->`.
+htmlclean removes HTML comments that include SSI tag like `<!-- Info for admin - Foo:<?= expression ?> -->`. I think it's no problem because htmlclean is used to minify HTML. If that SSI tag includes important code for logic, use a `protect` option, or `<!--[htmlclean-protect]-->` and `<!--[/htmlclean-protect]-->`.
 
 ## Release History
  * 2014-08-30     v2.2.0      Add more SSI tags (PHP, etc.) to protection.
