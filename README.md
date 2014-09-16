@@ -222,12 +222,13 @@ Some language parsers also mistake, then those recommend us to write code like `
 
 htmlclean removes HTML comments that include SSI tag like `<!-- Info for admin - Foo:<?= expression ?> -->`. I think it's no problem because htmlclean is used to minify HTML. If that SSI tag includes important code for logic, use a `protect` option, or `<!--[htmlclean-protect]-->` and `<!--[/htmlclean-protect]-->`.
 
-### Gulp plugin
+## See Also
 
-There is a glup [plugin](https://github.com/hemanth/gulp-cleanhtml) avaliable for this module.
+* [Grunt](http://gruntjs.com/) plugin: [grunt-htmlclean](https://github.com/anseki/grunt-htmlclean)
+* [gulp](http://gulpjs.com/) plugin: [gulp-cleanhtml](https://github.com/hemanth/gulp-cleanhtml)
 
-## Release History
- * 2014-08-30     v2.2.0      Add more SSI tags (PHP, etc.) to protection.
+## History
+ * 2014-08-30			v2.2.0			Add more SSI tags (PHP, etc.) to protection.
  * 2014-06-15			v2.1.1			Restoration accepts nested saved texts.
  * 2014-06-15			v2.1.0			Add `unprotect` option.
  * 2014-06-14			v2.0.2			Add `<!-->`, `<!--<![` and others to protected texts.
