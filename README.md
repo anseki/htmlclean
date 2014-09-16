@@ -225,7 +225,7 @@ htmlclean removes HTML comments that include SSI tag like `<!-- Info for admin -
 ## See Also
 
 * [Grunt](http://gruntjs.com/) plugin: [grunt-htmlclean](https://github.com/anseki/grunt-htmlclean)
-* [gulp](http://gulpjs.com/) plugin: [gulp-cleanhtml](https://github.com/hemanth/gulp-cleanhtml)
+* [gulp](http://gulpjs.com/) plugin: [gulp-htmlclean](https://github.com/anseki/gulp-htmlclean)
 
 ## History
  * 2014-08-30			v2.2.0			Add more SSI tags (PHP, etc.) to protection.
