@@ -45,7 +45,7 @@ The following texts are protected (excluded from removing).
 ## Installation
 
 ```
-npm install -g htmlclean
+npm install htmlclean
 ```
 
 ## Usage
