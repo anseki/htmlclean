@@ -29,6 +29,7 @@ whitespaces,	tabs and
     </p>
 <p>The <strong> clean <span> <em> HTML is here. </em> </span> </strong> </p>
 
+<  p  class = "clean" >The vain whitespaces< br / > in tags.< / p >
 
 <!-- Commented out HTML
   <div>foo<span>bar</span></div>
@@ -55,6 +56,10 @@ kept.">The tabs and</div>
 <div><span>'</span> <span>'</span> is one space(this will be kept).</div>
 
 <div><!--#echo var="LAST_MODIFIED" -->Apache SSI tag will be kept.</div>
+
+<?php
+$foo =    'The text in    PHP code';
+?>
 
 <div><!--[htmlclean-protect]-->Here, 
 text will     be kept.<!--[/htmlclean-protect]--></div>

@@ -1,6 +1,7 @@
 # htmlclean
 
-Simple and lightweight cleaner that just removes whitespaces, comments, etc. to minify HTML.
+Simple and lightweight cleaner that just removes whitespaces, comments, etc. to minify HTML.  
+This differs from others in that this removes whitespaces, line-breaks, etc. as much as possible.
 
 [HtmlCompressor](http://code.google.com/p/htmlcompressor/), [HTMLMinifier](https://github.com/kangax/html-minifier) and others are better choice if you want to control details of editing.  
 Those configuring are a little pain in the neck for me. And the results was not what I need. So, I wrote htmlclean. This removes unneeded whitespaces, line-breaks, comments, etc. That's all.
@@ -89,6 +90,8 @@ The protected texts are hidden from HTML, and HTML is passed to this Function. T
 
 ## Example
 
+See the results HTML files in the `sample` directory.
+
 ```js
 var htmlclean = require('htmlclean'),
   fs = require('fs'),
@@ -103,112 +106,6 @@ var htmlAfter2 = htmlclean(htmlBefore, {
   edit: function(html) { return html.replace(/\begg(s?)\b/ig, 'omelet$1'); }
 });
 fs.writeFileSync('./after2.html', htmlAfter2);
-```
-
-`before.html`
-
-```html
-
-		
-  
-<html>
-<!-- The whitespaces, tabs and line-breaks before html tag will be removed. And this tag too. -->
-<body>
-<!--[if lt IE 7]>This line will be kept.<![endif]-->
-
-<p>The more    than two
-whitespaces,	tabs and
-
- line-breaks
- 		
- 		will be suppressed to one space.</p>
-
-    <p>
-        <em>
-            <i>
-            The
-            </i>
-            <font>
-                <i>
-                clean
-                </i>
-                HTML
-            </font>
-        </em>
-        is here.
-    </p>
-<p>The <strong> clean <span> <em> HTML is here. </em> </span> </strong> </p>
-
-
-<!-- Commented out HTML
-  <div>foo<span>bar</span></div>
-  <p>foo bar</p>
--->
-
-<script>
-var foo =    'The text in    script element' +
-					' will be		kept.';
-</script>
-
-<script type="text/x-handlebars-template">
-  <!-- These are unprotected by option -->
-  <div>
-    <div>{{firstName}}</div>
-    <div>{{lastName}}</div>
-  </div>
-</script>
-
-<div    title="The whitespaces before 'title' will be suppressed to one space. This  text     will be 
-kept.">The tabs and</div>
-	<div>line-breaks between HTML tags will be removed.</div>
-
-<div><span>'</span> <span>'</span> is one space(this will be kept).</div>
-
-<div><!--#echo var="LAST_MODIFIED" -->Apache SSI tag will be kept.</div>
-
-<div><!--[htmlclean-protect]-->Here, 
-text will     be kept.<!--[/htmlclean-protect]--></div>
-
-<!-- These are protected by option -->
-<div><!--%fooTemplate-head%--></div>
-<div><!--%fooTemplate-content%--></div>
-
-<div title="This egg is protected.">These Eggs are unprotected.</div>
-
-</body>
-<!-- The whitespaces, tabs and line-breaks after html close-tag will be removed. And this tag too. -->
-</html>
-
-		
-  
-```
-
-`after1.html`
-
-```html
-<html><body><!--[if lt IE 7]>This line will be kept.<![endif]--><p>The more than two whitespaces, tabs and line-breaks will be suppressed to one space.</p><p> <em><i>The</i> <font><i>clean</i> HTML</font></em> is here.</p><p>The <strong>clean <span><em>HTML is here.</em></span></strong></p><script>
-var foo =    'The text in    script element' +
-					' will be		kept.';
-</script><script type="text/x-handlebars-template">
-  <!-- These are unprotected by option -->
-  <div>
-    <div>{{firstName}}</div>
-    <div>{{lastName}}</div>
-  </div>
-</script><div title="The whitespaces before 'title' will be suppressed to one space. This  text     will be 
-kept.">The tabs and</div><div>line-breaks between HTML tags will be removed.</div><div><span>'</span> <span>'</span> is one space(this will be kept).</div><div><!--#echo var="LAST_MODIFIED" -->Apache SSI tag will be kept.</div><div>Here, 
-text will     be kept.</div><div></div><div></div><div title="This egg is protected.">These Eggs are unprotected.</div></body></html>
-```
-
-`after2.html`
-
-```html
-<html><body><!--[if lt IE 7]>This line will be kept.<![endif]--><p>The more than two whitespaces, tabs and line-breaks will be suppressed to one space.</p><p> <em><i>The</i> <font><i>clean</i> HTML</font></em> is here.</p><p>The <strong>clean <span><em>HTML is here.</em></span></strong></p><script>
-var foo =    'The text in    script element' +
-					' will be		kept.';
-</script><script type="text/x-handlebars-template"><div><div>{{firstName}}</div><div>{{lastName}}</div></div></script><div title="The whitespaces before 'title' will be suppressed to one space. This  text     will be 
-kept.">The tabs and</div><div>line-breaks between HTML tags will be removed.</div><div><span>'</span> <span>'</span> is one space(this will be kept).</div><div><!--#echo var="LAST_MODIFIED" -->Apache SSI tag will be kept.</div><div>Here, 
-text will     be kept.</div><div><!--%fooTemplate-head%--></div><div><!--%fooTemplate-content%--></div><div title="This egg is protected.">These omelets are unprotected.</div></body></html>
 ```
 
 ## Note
@@ -228,6 +125,7 @@ htmlclean removes HTML comments that include SSI tag like `<!-- Info for admin -
 * [gulp](http://gulpjs.com/) plugin: [gulp-htmlclean](https://github.com/anseki/gulp-htmlclean)
 
 ## History
+ * 2014-09-18			v2.2.1			Add: Check the whitespaces in tags.
  * 2014-08-30			v2.2.0			Add more SSI tags (PHP, etc.) to protection.
  * 2014-06-15			v2.1.1			Restoration accepts nested saved texts.
  * 2014-06-15			v2.1.0			Add `unprotect` option.
