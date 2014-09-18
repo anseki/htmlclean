@@ -125,6 +125,7 @@ htmlclean removes HTML comments that include SSI tag like `<!-- Info for admin -
 * [gulp](http://gulpjs.com/) plugin: [gulp-htmlclean](https://github.com/anseki/gulp-htmlclean)
 
 ## History
+ * 2014-09-18			v2.2.2			Fix: The tabs etc. in tags are remained.
  * 2014-09-18			v2.2.1			Add: Check the whitespaces in tags.
  * 2014-08-30			v2.2.0			Add more SSI tags (PHP, etc.) to protection.
  * 2014-06-15			v2.1.1			Restoration accepts nested saved texts.
