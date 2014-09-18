@@ -81,6 +81,8 @@ html = htmlclean(html, {
 });
 ```
 
+The `x-handlebars-template` in `type` attribute above is case of using the Template Framework [Handlebars](http://handlebarsjs.com/). e.g. [AngularJS](https://angularjs.org/) requires `ng-template` instead of it.
+
 *NOTE:* The RegExp has to match to text which is not a part of protected text. For example, the RegExp matches `color: red;` in `<style>` element, but this is not cleaned because all texts in the `<style>` element are protected. (`color: red;` is a part of protected text.) The RegExp has to match to text which is all of `<style>` element like `/<style[\s\S]+?<\/style>/`.
 
 + <strong>`edit` Type: Function</strong>  
