@@ -55,7 +55,7 @@ npm install htmlclean
 cleanHtml = htmlclean(sourceHtml[, options])
 ```
 
-`require('htmlclean')` returns a Function. This Function accepts source HTML, and returns clean HTML. If you want, you can specify option to second argument.
+`require('htmlclean')` returns a Function. This Function accepts source HTML, and returns clean HTML. If you want, you can specify options to second argument (see "Options").
 
 ```js
 var htmlclean = require('htmlclean');
@@ -66,7 +66,7 @@ html = require('htmlclean')(html);
 ```
 
 ### Options
-You can specify option Object to second argument. This Object can have following properties.
+You can specify `options` Object to second argument. This Object can have following properties.
 
 + <strong>`protect` Type: RegExp or Array</strong>  
 The texts which are matched to this RegExp are protected in addition to above "Protecting" list. The multiple RegExps can be specified via Array.
