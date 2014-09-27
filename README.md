@@ -88,11 +88,11 @@ The `x-handlebars-template` in `type` attribute above is case of using the Templ
 + <strong>`edit` Type: Function</strong>  
 This Function more edits HTML.  
 The protected texts are hidden from HTML, and HTML is passed to this Function. Therefore, this Function doesn't break protected texts. The HTML which returned from this Function is restored.  
-*NOTE:* Markers `\fID\f` (`ID` is number) are inserted to HTML instead of protected texts. This Function can remove these markers, but can't add new markers. (Invalid markers will be just removed.)
+*NOTE:* Markers `\fID\f` (`\f` is "form feed" `\x0C` code, `ID` is number) are inserted to HTML instead of protected texts. This Function can remove these markers, but can't add new markers. (Invalid markers will be just removed.)
 
 ## Example
 
-See the results HTML files in the `sample` directory.
+See the source HTML file and results HTML files in the `sample` directory.
 
 ```js
 var htmlclean = require('htmlclean'),
