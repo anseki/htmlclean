@@ -86,7 +86,7 @@ The `x-handlebars-template` in `type` attribute above is case of using the Templ
 *NOTE:* The RegExp has to match to text which is not a part of protected text. For example, the RegExp matches `color: red;` in `<style>` element, but this is not cleaned because all texts in the `<style>` element are protected. (`color: red;` is a part of protected text.) The RegExp has to match to text which is all of `<style>` element like `/<style[\s\S]+?<\/style>/`.
 
 + <strong>`edit` Type: Function</strong>  
-This Function more edit HTML.  
+This Function more edits HTML.  
 The protected texts are hidden from HTML, and HTML is passed to this Function. Therefore, this Function doesn't break protected texts. The HTML which returned from this Function is restored.  
 *NOTE:* Markers `\fID\f` (`ID` is number) are inserted to HTML instead of protected texts. This Function can remove these markers, but can't add new markers. (Invalid markers will be just removed.)
 
