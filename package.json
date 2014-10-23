@@ -1,28 +1,8 @@
 {
   "name": "htmlclean",
+  "version": "2.2.3",
+  "title": "htmlclean",
   "description": "Simple and lightweight cleaner that just removes whitespaces, comments, etc. to minify HTML. This differs from others in that this removes whitespaces, line-breaks, etc. as much as possible.",
-  "version": "2.2.2a",
-  "homepage": "https://github.com/anseki/htmlclean",
-  "author": {
-    "name": "anseki"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/anseki/htmlclean.git"
-  },
-  "bugs": {
-    "url": "https://github.com/anseki/htmlclean/issues"
-  },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://github.com/anseki/htmlclean/blob/master/LICENSE-MIT"
-    }
-  ],
-  "main": "./lib/htmlclean.js",
-  "engines": {
-    "node": ">= 0.8.0"
-  },
   "keywords": [
     "html",
     "clean",
@@ -32,5 +12,20 @@
     "minify",
     "remove space",
     "lightweight"
-  ]
+  ],
+  "main": "./lib/htmlclean.js",
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "homepage": "https://github.com/anseki/htmlclean",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/anseki/htmlclean.git"
+  },
+  "bugs": "https://github.com/anseki/htmlclean/issues",
+  "licenses": "MIT",
+  "author": {
+    "name": "anseki",
+    "url": "https://github.com/anseki"
+  }
 }
