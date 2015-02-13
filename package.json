@@ -1,16 +1,17 @@
 {
   "name": "htmlclean",
-  "version": "2.3.1",
+  "version": "2.3.2",
   "title": "htmlclean",
-  "description": "Simple and lightweight cleaner that just removes whitespaces, comments, etc. to minify HTML. This differs from others in that this removes whitespaces, line-breaks, etc. as much as possible.",
+  "description": "Simple and lightweight cleaner that just removes whitespaces, comments, etc. to minify HTML/SVG. This differs from others in that this removes whitespaces, line-breaks, etc. as much as possible.",
   "keywords": [
     "html",
+    "svg",
     "clean",
     "whitespace",
-    "line break",
+    "linebreak",
     "comment",
     "minify",
-    "remove space",
+    "compress",
     "lightweight"
   ],
   "main": "./lib/htmlclean.js",
