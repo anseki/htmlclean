@@ -1,5 +1,8 @@
 # htmlclean
 
+* [Grunt](http://gruntjs.com/) plugin: [grunt-htmlclean](https://github.com/anseki/grunt-htmlclean)
+* [gulp](http://gulpjs.com/) plugin: [gulp-htmlclean](https://github.com/anseki/gulp-htmlclean)
+
 Simple and lightweight cleaner that just removes whitespaces, comments, etc. to minify HTML.  
 This differs from others in that this removes whitespaces, line-breaks, etc. as much as possible.
 
@@ -121,12 +124,8 @@ Some language parsers also mistake, then those recommend us to write code like `
 
 htmlclean removes HTML comments that include SSI tag like `<!-- Info for admin - Foo:<?= expression ?> -->`. I think it's no problem because htmlclean is used to minify HTML. If that SSI tag includes important code for logic, use a `protect` option, or `<!--[htmlclean-protect]-->` and `<!--[/htmlclean-protect]-->`.
 
-## See Also
-
-* [Grunt](http://gruntjs.com/) plugin: [grunt-htmlclean](https://github.com/anseki/grunt-htmlclean)
-* [gulp](http://gulpjs.com/) plugin: [gulp-htmlclean](https://github.com/anseki/gulp-htmlclean)
-
 ## History
+ * 2015-02-13			v2.3.0			Support SVG 1.1 Second Edition
  * 2014-09-18			v2.2.2			Fix: The tabs etc. in tags are remained.
  * 2014-09-18			v2.2.1			Add: Check the whitespaces in tags.
  * 2014-08-30			v2.2.0			Add more SSI tags (PHP, etc.) to protection.
