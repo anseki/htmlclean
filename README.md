@@ -98,7 +98,7 @@ htmlclean -i head.html -i body.html -i foot.html \
 
 ### GUI Tip
 
-If you have GUI (desktop) system (Windows, Mac, Ubuntu, etc.), drag-and-drop the target file or directory to `htmlclean` icon. The `htmlclean` icon is installed into directory of Node, usually. Or the short cut (alias, link, etc.) icon on desktop also works.
+If you have GUI (desktop) system (Windows, Mac, Ubuntu, etc.), drag-and-drop the target file or directory to `htmlclean` icon. The `htmlclean` icon is installed into directory of Node, usually. Or the short cut (alias, link, etc.) icon on desktop also works.  
 ![desktop](gui.png)
 
 ## Node Module
