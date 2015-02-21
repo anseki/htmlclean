@@ -72,7 +72,7 @@ htmlclean index.html -o index.html
 
 * Clean all HTML files in `src` directory, and write into `public` directory.
 ```shell
-htmlclean src public
+htmlclean src -o public
 ```
 
 * Clean all SVG files.
@@ -87,7 +87,7 @@ wget -q -O - https://www.google.co.jp/ | htmlclean > index.html
 
 * Clean and compress `index.html`, and write to `index.gz`.
 ```shell
-htmlclean index.html - | gzip > index.gz
+htmlclean index.html -o - | gzip > index.gz
 ```
 
 * Clean 3 files, and write into 1 file.
@@ -96,10 +96,14 @@ htmlclean -i head.html -i body.html -i foot.html \
 -o index.html -o index.html -o index.html
 ```
 
-### GUI Tip
+### Drag & Drop & Clean
 
-If you have GUI (desktop) system (Windows, Mac, Ubuntu, etc.), drag-and-drop the target file or directory to `htmlclean` icon. The `htmlclean` icon is installed into directory of Node, usually. Or the short cut (alias, link, etc.) icon on desktop also works.  
-![desktop](gui.png)
+If you have GUI (desktop) system (Windows, Mac, Ubuntu, etc.), drag-and-drop the target file or directory or multiple items to `htmlclean` icon. Or the short cut (alias, link, etc.) icon on desktop also works.  
+![desktop](gui.png)  
+The `htmlclean` icon is found in:
+```shell
+npm bin -g
+```
 
 ## Node Module
 
@@ -184,6 +188,7 @@ htmlclean removes HTML/SVG comments that include SSI tag like `<!-- Info for adm
 If you want to control details of editing, [HtmlCompressor](http://code.google.com/p/htmlcompressor/), [HTMLMinifier](https://github.com/kangax/html-minifier) and others are better choice.
 
 ## History
+ * 2015-02-22			v2.5.0			Change: arguments that have no option.
  * 2015-02-21			v2.4.0			Add: Command line tool.
  * 2015-02-13			v2.3.0			Support SVG 1.1 Second Edition
  * 2014-08-30			v2.2.0			Add more SSI tags (PHP, etc.) to protection.

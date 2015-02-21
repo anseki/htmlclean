@@ -30,20 +30,19 @@ var
 
     input/output
 
-      The first argument that have no option is considered as input, and second
-      one is considered as output.
+      A argument that have no option is considered as input.
       For example:
-        htmlclean A.html B.html
+        htmlclean A.html
         equals
-        htmlclean -i A.html -o B.html
+        htmlclean -i A.html
 
       A "-" is specified as STDIN or STDOUT.
 
-      If multiple input and output are specified, the content from a first
+      If multiple inputs and outputs are specified, the content from a first
       input is written to a first output, and the content from a second input
       is written to a second output..., in this way.
-      The first and second arguments that have no option are added to last of
-      the input and output lists.
+      The all arguments that have no option are added to last of the inputs
+      list.
       If no inputs are specified, it's considered as one STDIN.
       The outputs exceeding inputs are ignored.
       For example:
@@ -81,7 +80,7 @@ var
         written to "index.min.html".
       If the input of a pair points to multiple files and a file (or STDOUT) is
       specified to the output of this pair, a concatenated content from all
-      input files is written to the output.
+      input files of this pair is written to the output.
 
       For example:
 
@@ -96,12 +95,12 @@ var
         * Clean all HTML files in "src" directory, and write into "public"
           directory.
 
-          htmlclean src public
+          htmlclean src -o public
 
         * Clean "index.html" in "src" directory, and write into "public"
           directory.
 
-          htmlclean src/index.html public
+          htmlclean src/index.html -o public
 
         * Clean 2 files.
 
@@ -127,7 +126,7 @@ var
         * Clean and compress "index.html", and write to "index.gz".
           (from file to STDOUT)
 
-          htmlclean index.html - | gzip > index.gz
+          htmlclean index.html -o - | gzip > index.gz
 
         * From STDIN to "public/A.html", from "src/B.html" to STDOUT.
 
@@ -195,9 +194,8 @@ program
     function() { console.log(DESC + (process.platform !== 'win32' ? '\n' : '')); });
 program.parse(process.argv);
 
-if (program.args[0]) { program.input.push(program.args[0]); }
-if (program.args[1]) { program.output.push(program.args[1]); }
-if (!program.input.length) { program.input.push('-'); }
+if (program.args.length) { program.input = program.input.concat(program.args); }
+else if (!program.input.length) { program.input.push('-'); }
 
 // protect/unprotect
 (function() {
