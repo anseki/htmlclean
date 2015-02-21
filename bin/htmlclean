@@ -1,0 +1,364 @@
+#!/usr/bin/env node
+
+/*
+ * readlineSync - Command Line Tool
+ * https://github.com/anseki/readline-sync
+ *
+ * Copyright (c) 2015 anseki
+ * Licensed under the MIT license.
+ */
+
+'use strict';
+
+var
+  htmlclean = require('../lib/htmlclean.js'),
+  program = require('commander'),
+  fs = require('fs'),
+  glob = require('glob'),
+  pathUtil = require('path'),
+
+  packageInfo = JSON.parse(
+    fs.readFileSync(__dirname + '/../package.json', {encoding: 'utf8'})),
+  count = 0,
+  options = {protect: [], unprotect: []},
+  // cache input contents and output fd etc.
+  inContents = {},
+  outFiles = {'-': {fd: process.stdout.fd, path: 'STDOUT'}},
+
+  DESC = function() {
+/*
+
+    input/output
+
+      The first argument that have no option is considered as input, and second
+      one is considered as output.
+      For example:
+        htmlclean A.html B.html
+        equals
+        htmlclean -i A.html -o B.html
+
+      A "-" is specified as STDIN or STDOUT.
+
+      If multiple input and output are specified, the content from a first
+      input is written to a first output, and the content from a second input
+      is written to a second output..., in this way.
+      The first and second arguments that have no option are added to last of
+      the input and output lists.
+      If no inputs are specified, it's considered as one STDIN.
+      The outputs exceeding inputs are ignored.
+      For example:
+        htmlclean -o A.html -o B.html
+        A first input is STDIN, "B.html" is ignored.
+
+      If a file is specified to the input of a pair and a directory is
+      specified to the output of this pair, the content is written to the same
+      named file in the specified directory.
+      If a file is specified to the input of a pair and the output of this pair
+      isn't specified, the content is written to the file named
+      "<input>.min.<ext>".
+      For example:
+        If the name of file as input is "index.html", then the content is
+        written to "index.min.html".
+      If STDIN is specified to the input of a pair and the output of this pair
+      isn't specified (or a directory is specified), the content is written to
+      STDOUT.
+
+      The input can be Glob pattern like "*.html".
+      For Glob pattern syntax, see:
+        https://github.com/isaacs/node-glob
+        https://github.com/isaacs/minimatch
+
+      If a directory is specified to the input, it is considered as
+      "directory/*.html".
+      If the input of a pair points to multiple files and a directory is
+      specified to the output of this pair, the each content is written to the
+      same named file in the specified directory.
+      If the input of a pair points to multiple files and the output of this
+      pair isn't specified, the each content is written to the file named
+      "<input>.min.<ext>".
+      For example:
+        If the name of file as input is "index.html", then the content is
+        written to "index.min.html".
+      If the input of a pair points to multiple files and a file (or STDOUT) is
+      specified to the output of this pair, a concatenated content from all
+      input files is written to the output.
+
+      For example:
+
+        * Clean "index.html", and write to "index.min.html".
+
+          htmlclean index.html
+
+        * Clean "index.html", and overwrite it.
+
+          htmlclean index.html -o index.html
+
+        * Clean all HTML files in "src" directory, and write into "public"
+          directory.
+
+          htmlclean src public
+
+        * Clean "index.html" in "src" directory, and write into "public"
+          directory.
+
+          htmlclean src/index.html public
+
+        * Clean 2 files.
+
+          htmlclean -i A.html -o A.cln.html -i B.html -o B.cln.html
+
+        * Clean 2 files in "src" directory, and write into "public" directory.
+
+          htmlclean -i src/A.html -o public -i src/B.html -o public
+
+        * Equal to above.
+
+          htmlclean -i "src/@(A|B).html" -o public
+
+        * Clean all SVG files.
+
+          htmlclean *.svg
+
+        * Clean web page on URL, and write to "index.html".
+          (from STDIN to STDOUT)
+
+          wget -q -O - https://www.google.co.jp/ | htmlclean > index.html
+
+        * Clean and compress "index.html", and write to "index.gz".
+          (from file to STDOUT)
+
+          htmlclean index.html - | gzip > index.gz
+
+        * From STDIN to "public/A.html", from "src/B.html" to STDOUT.
+
+          htmlclean -i - -o public/A.html -i src/B.html -o -
+
+        * Clean 3 files, and write into 1 file.
+
+          htmlclean -i head.html -i body.html -i foot.html \
+            -o index.html -o index.html -o index.html
+
+        * Clean all HTML and SVG and PHP files.
+
+          htmlclean *.{html,svg,php}
+
+        * Clean all files that has a number as the first character, and
+          extension is "html" or "htm".
+
+          htmlclean [0-9]*.htm?(l)
+
+    protect/unprotect
+
+      These must be a text like "/pattern/flags" as RegExp.
+      The multiple options can be specified.
+      See https://github.com/anseki/htmlclean/
+
+      For example:
+
+        * For some Template Framework and AngularJS.
+
+          htmlclean \
+            -p "/<\!--%fooTemplate\b.*?%-->/g" \
+            -p "/<\!--%barTemplate\b.*?%-->/g" \
+            -P "/<script [^>]*\btype="text\/ng-template"[\s\S]+?<\/script>/ig"
+*/
+  }.toString().replace(/function+\W+\*[^]\n|\s+\*\/\s+}$/g, '');
+
+function addList(val, list) {
+  list.push(val);
+  return list;
+}
+
+program
+  .version(packageInfo.version)
+  .description((function(text) {
+      var lines =[], line = '';
+      text.split(' ').forEach(function(word) {
+        if (line.length + 1 + word.length > 77) { // MAX: 79
+          lines.push(line);
+          line = word;
+        } else {
+          line += (line ? ' ' : '') + word;
+        }
+      });
+      if (line !== '') { lines.push(line); }
+      return lines.join('\n  ');
+    })(packageInfo.description) + '\n  ' + packageInfo.homepage)
+  .usage('[options] [input [output]]')
+  .option('-i, --input <input>', 'input file, directory or "-" as STDIN', addList, [])
+  .option('-o, --output <output>', 'output file, directory or "-" as STDOUT', addList, [])
+  .option('-p, --protect <RegExp>', '"/pattern/flags" for protect', addList, [])
+  .option('-P, --unprotect <RegExp>', '"/pattern/flags" for unprotect', addList, [])
+  .option('-e, --encoding <encoding>', 'encoding method [utf8]', 'utf8')
+  .option('-v, --verbose', 'output I/O information to STDERR')
+  .on('--help',
+    function() { console.log(DESC + (process.platform !== 'win32' ? '\n' : '')); });
+program.parse(process.argv);
+
+if (program.args[0]) { program.input.push(program.args[0]); }
+if (program.args[1]) { program.output.push(program.args[1]); }
+if (!program.input.length) { program.input.push('-'); }
+
+// protect/unprotect
+(function() {
+  var reRe = /^\s*\/(.+)\/\s*(\w*)\s*$/;
+  ['protect', 'unprotect'].forEach(function(prop) {
+    program[prop].forEach(function(re) {
+      var matches = reRe.exec(re);
+      if (!matches) {
+        console.error('SyntaxError: Invalid regular expression: %s', re);
+        process.exit(1);
+      }
+      try {
+        options[prop].push(new RegExp(matches[1], matches[2]));
+      } catch (e) {
+        console.error(e + '');
+        process.exit(1);
+      }
+    });
+  });
+})();
+
+// I/O loop
+program.input.forEach(function(input, index) {
+  var output = program.output[index];
+  printInfo('[ARGUMENT]\n  INPUT : %s\n  OUTPUT: %s', input || '', output || '');
+  try {
+    pair(input, output);
+  } catch (e) {
+    console.error(e + '');
+  }
+});
+
+// finalize
+(function() {
+  var key;
+  for (key in outFiles) {
+    if (key !== '-' && outFiles.hasOwnProperty(key)) {
+      fs.closeSync(outFiles[key].fd);
+    }
+  }
+})();
+
+process.exit();
+
+function pair(input, output) {
+  var paths, inContent, outFile;
+
+  // normalize input
+  if (typeof input !== 'string' || input === '') {
+    input = '-';
+  } else if (input !== '-') { // path or pattern
+    paths = glob.sync(input);
+    if (!paths.length) { // Not found
+      return;
+    } else if (paths.length > 1) {
+      paths.forEach(function(path) {
+        pair(path, output);
+      });
+      return;
+    } else if (fs.statSync(paths[0]).isDirectory()) {
+      pair(paths[0] + (paths[0].substr(-1) !== '/' ? '/' : '') + '*.html', output);
+      return;
+    } else if (!fs.statSync(paths[0]).isFile()) {
+      return;
+    }
+    input = fs.realpathSync(paths[0]);
+  }
+  // get content from input
+  inContent = getInContent(input);
+
+  // normalize & open output
+  outFile = getOutFile(output, input);
+
+  fs.writeSync(outFile.fd, inContent.content, null, program.encoding);
+  // fsyncSync gets an error (bad file descriptor) when STDOUT is TTY of csh or DOS.
+  try {
+    fs.fsyncSync(outFile.fd);
+  } catch (e) {}
+
+  printInfo('[%d] Done\n  INPUT : %s\n  OUTPUT: %s',
+    ++count, inContent.path, outFile.path);
+}
+
+function getInContent(path) { // path was normalized
+
+  function readStdin() {
+    var stdin = process.stdin,
+      // DOS can't read separated data, bash can't get size.
+      size = fs.fstatSync(stdin.fd).size || 256,
+      buffer = new Buffer(size), input = '', rsize;
+    stdin.resume();
+    while (true) {
+      rsize = 0;
+      try {
+        rsize = fs.readSync(stdin.fd, buffer, 0, size);
+      } catch (e) {
+        if (e.code === 'EOF') { break; } // pipe
+        throw e;
+      }
+      if (rsize === 0) { break; }
+      input += buffer.toString(program.encoding, 0, rsize);
+    }
+    stdin.pause();
+    return input;
+  }
+
+  if (!inContents[path]) {
+    if (path === '-') {
+      inContents[path] = {content: htmlclean(readStdin(), options), path: 'STDIN'};
+    } else {
+      inContents[path] = {
+        content: htmlclean(fs.readFileSync(path, {encoding: program.encoding}),
+          options),
+        path: path};
+    }
+  }
+  return inContents[path];
+}
+
+function getOutFile(path, inPath) {
+  var normalPath, key, fd;
+
+  function getMinPath(path) {
+    var suffix = pathUtil.extname(path);
+    return pathUtil.join(pathUtil.dirname(path),
+      pathUtil.basename(path, suffix) + '.min' + suffix);
+  }
+
+  function getPathInDir(path, dirPath) {
+    return pathUtil.join(dirPath, pathUtil.basename(path));
+  }
+
+  if (typeof path !== 'string' || path === '') { // inPath must be given, if path isn't
+    path = inPath === '-' ? '-' : getMinPath(inPath);
+  }
+  if (path === '-') {
+    key = path;
+  } else {
+    normalPath = key = pathUtil.resolve(path);
+    if (process.platform === 'win32') { key = key.toLowerCase(); }
+  }
+
+  if (!outFiles[key]) {
+    try {
+      fd = fs.openSync(normalPath, 'w');
+    } catch (e) {
+      if (e.code === 'EISDIR' && typeof inPath === 'string') { // path is directory
+        return getOutFile(inPath === '-' ? '-' : getPathInDir(inPath, normalPath));
+      } else {
+        // file in directory that doesn't exist,
+        // re-parsed path is directory, or others
+        throw e;
+      }
+    }
+    outFiles[key] = {fd: fd, path: fs.realpathSync(normalPath)};
+  }
+  return outFiles[key];
+}
+
+function printInfo() {
+  if (program.verbose) {
+    console.warn.apply(console, arguments);
+  }
+}

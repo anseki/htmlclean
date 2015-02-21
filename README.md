@@ -6,9 +6,6 @@
 Simple and lightweight cleaner that just removes whitespaces, comments, etc. to minify HTML/SVG.  
 This differs from others in that this removes whitespaces, line-breaks, etc. as much as possible.
 
-[HtmlCompressor](http://code.google.com/p/htmlcompressor/), [HTMLMinifier](https://github.com/kangax/html-minifier) and others are better choice if you want to control details of editing.  
-Those configuring are a little pain in the neck for me. And the results was not what I need. So, I wrote htmlclean. This removes unneeded whitespaces, line-breaks, comments, etc. That's all.
-
 ## Removing
 htmlclean removes the following texts.
 
@@ -49,10 +46,62 @@ The following texts are protected (excluded from removing).
 ## Installation
 
 ```
-npm install htmlclean
+npm install -g htmlclean
 ```
 
-## Usage
+## Command Line Tool
+
+```shell
+htmlclean [options] [input [output]]
+```
+
+Command line tool needs `-g` option when install package.  
+See `htmlclean -h` for usage.
+
+### Example
+
+* Clean `index.html`, and write to `index.min.html`.
+```shell
+htmlclean index.html
+```
+
+* Clean `index.html`, and overwrite it.
+```shell
+htmlclean index.html -o index.html
+```
+
+* Clean all HTML files in `src` directory, and write into `public` directory.
+```shell
+htmlclean src public
+```
+
+* Clean all SVG files.
+```shell
+htmlclean *.svg
+```
+
+* Clean web page on URL, and write to `index.html`.
+```shell
+wget -q -O - https://www.google.co.jp/ | htmlclean > index.html
+```
+
+* Clean and compress `index.html`, and write to `index.gz`.
+```shell
+htmlclean index.html - | gzip > index.gz
+```
+
+* Clean 3 files, and write into 1 file.
+```shell
+htmlclean -i head.html -i body.html -i foot.html \
+-o index.html -o index.html -o index.html
+```
+
+### GUI Tip
+
+If you have GUI (desktop) system (Windows, Mac, Ubuntu, etc.), drag-and-drop the target file or directory to `htmlclean` icon. The `htmlclean` icon is installed into directory of Node, usually. Or the short cut (alias, link, etc.) icon on desktop also works.
+![desktop](gui.png)
+
+## Node Module
 
 ```js
 cleanHtml = htmlclean(sourceHtml[, options])
@@ -71,10 +120,14 @@ html = require('htmlclean')(html);
 ### Options
 You can specify `options` Object to second argument. This Object can have following properties.
 
-+ <strong>`protect` Type: RegExp or Array</strong>  
+#### protect
+Type: RegExp or Array
+
 The texts which are matched to this RegExp are protected in addition to above "Protecting" list. The multiple RegExps can be specified via Array.
 
-+ <strong>`unprotect` Type: RegExp or Array</strong>  
+#### unprotect
+Type: RegExp or Array
+
 The texts which are matched to this RegExp are cleaned even if the text is included in above "Protecting" list. The multiple RegExps can be specified via Array.  
 For example, HTML as template in `<script type="text/x-handlebars-template">` is cleaned via following.
 
@@ -88,12 +141,14 @@ The `x-handlebars-template` in `type` attribute above is case of using the Templ
 
 *NOTE:* The RegExp has to match to text which is not a part of protected text. For example, the RegExp matches `color: red;` in `<style>` element, but this is not cleaned because all texts in the `<style>` element are protected. (`color: red;` is a part of protected text.) The RegExp has to match to text which is all of `<style>` element like `/<style[\s\S]+?<\/style>/`.
 
-+ <strong>`edit` Type: Function</strong>  
+#### edit
+Type: Function
+
 This Function more edits HTML.  
 The protected texts are hidden from HTML, and HTML is passed to this Function. Therefore, this Function doesn't break protected texts. The HTML which returned from this Function is restored.  
 *NOTE:* Markers `\fID\f` (`\f` is "form feed" `\x0C` code, `ID` is number) are inserted to HTML instead of protected texts. This Function can remove these markers, but can't add new markers. (Invalid markers will be just removed.)
 
-## Example
+### Example
 
 See the source HTML file and results HTML files in the `sample` directory.
 
@@ -124,14 +179,14 @@ Some language parsers also mistake, then those recommend us to write code like `
 
 htmlclean removes HTML/SVG comments that include SSI tag like `<!-- Info for admin - Foo:<?= expression ?> -->`. I think it's no problem because htmlclean is used to minify HTML. If that SSI tag includes important code for logic, use a `protect` option, or `<!--[htmlclean-protect]-->` and `<!--[/htmlclean-protect]-->`.
 
+## See Also
+
+If you want to control details of editing, [HtmlCompressor](http://code.google.com/p/htmlcompressor/), [HTMLMinifier](https://github.com/kangax/html-minifier) and others are better choice.
+
 ## History
+ * 2015-02-21			v2.4.0			Add: Command line tool.
  * 2015-02-13			v2.3.0			Support SVG 1.1 Second Edition
- * 2014-09-18			v2.2.2			Fix: The tabs etc. in tags are remained.
- * 2014-09-18			v2.2.1			Add: Check the whitespaces in tags.
  * 2014-08-30			v2.2.0			Add more SSI tags (PHP, etc.) to protection.
- * 2014-06-15			v2.1.1			Restoration accepts nested saved texts.
  * 2014-06-15			v2.1.0			Add `unprotect` option.
- * 2014-06-14			v2.0.2			Add `<!-->`, `<!--<![` and others to protected texts.
- * 2014-06-11			v2.0.1			Fix: Comment tags that include other tags are not removed.
  * 2013-11-06			v2.0.0			Change logic of handling whitespaces and others.
  * 2013-08-27			v0.1.0			Initial release.
