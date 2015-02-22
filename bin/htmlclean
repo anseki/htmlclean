@@ -19,8 +19,8 @@ var
 
   packageInfo = JSON.parse(
     fs.readFileSync(__dirname + '/../package.json', {encoding: 'utf8'})),
-  count = 0,
   options = {protect: [], unprotect: []},
+  count = 0,
   // cache input contents and output fd etc.
   inContents = {},
   outFiles = {'-': {fd: process.stdout.fd, path: 'STDOUT'}},
@@ -118,13 +118,13 @@ var
 
           htmlclean *.svg
 
-        * Clean web page on URL, and write to "index.html".
-          (from STDIN to STDOUT)
+        * Get and clean web page on URL, and write to "index.html".
+          (from STDIN)
 
-          wget -q -O - https://www.google.co.jp/ | htmlclean > index.html
+          wget -q -O - https://github.com/ | htmlclean -o index.html
 
         * Clean and compress "index.html", and write to "index.gz".
-          (from file to STDOUT)
+          (to STDOUT)
 
           htmlclean index.html -o - | gzip > index.gz
 

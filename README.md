@@ -80,9 +80,9 @@ htmlclean src -o public
 htmlclean *.svg
 ```
 
-* Clean web page on URL, and write to `index.html`.
+* Get and clean web page on URL, and write to `index.html`.
 ```shell
-wget -q -O - https://www.google.co.jp/ | htmlclean > index.html
+wget -q -O - https://github.com/ | htmlclean -o index.html
 ```
 
 * Clean and compress `index.html`, and write to `index.gz`.
@@ -98,8 +98,9 @@ htmlclean -i head.html -i body.html -i foot.html \
 
 ### Drag & Drop & Clean
 
-If you have GUI (desktop) system (Windows, Mac, Ubuntu, etc.), drag-and-drop the target file or directory or multiple items to `htmlclean` icon. Or the short cut (alias, link, etc.) icon on desktop also works.  
-![desktop](gui.png)  
+In GUI environment, drag-and-drop the target file or directory or multiple items to the `htmlclean` icon. Or the short cut (alias, link, etc.) icon on desktop also works.  
+![desktop](gui.png)
+
 The `htmlclean` icon is found in:
 ```shell
 npm bin -g
