@@ -17,8 +17,7 @@ var
   glob = require('glob'),
   pathUtil = require('path'),
 
-  packageInfo = JSON.parse(
-    fs.readFileSync(__dirname + '/../package.json', {encoding: 'utf8'})),
+  packageInfo = require('../package.json'),
   options = {protect: [], unprotect: []},
   count = 0,
   // cache input contents and output fd etc.
