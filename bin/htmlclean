@@ -23,6 +23,7 @@ var
   // cache input contents and output fd etc.
   inContents = {},
   outFiles = {'-': {fd: process.stdout.fd, path: 'STDOUT'}},
+  DEFAULT_BUF_SIZE = 1024,
 
   DESC = function() {
 /*
@@ -159,6 +160,15 @@ var
             -p "/<\!--%fooTemplate\b.*?%-->/g" \
             -p "/<\!--%barTemplate\b.*?%-->/g" \
             -P "/<script [^>]*\btype="text\/ng-template"[\s\S]+?<\/script>/ig"
+
+    Note
+
+      On Windows XP, 2000 + Node v11-, the redirecting doesn't work, the piping
+      works.
+        Use
+        type file.html | htmlclean
+        instead of
+        htmlclean < file.html
 */
   }.toString().replace(/function+\W+\*[^]\n|\s+\*\/\s+}$/g, '');
 
@@ -282,22 +292,23 @@ function getInContent(path) { // path was normalized
 
   function readStdin() {
     var stdin = process.stdin,
-      // DOS can't read separated data, bash can't get size.
-      size = fs.fstatSync(stdin.fd).size || 256,
-      buffer = new Buffer(size), input = '', rsize;
-    stdin.resume();
+      fd = stdin.isTTY && process.platform !== 'win32' ?
+        fs.openSync('/dev/tty', 'rs') : stdin.fd,
+      bufSize = stdin.isTTY ? DEFAULT_BUF_SIZE :
+        (fs.fstatSync(fd).size || DEFAULT_BUF_SIZE),
+      buffer = new Buffer(bufSize),
+      rsize, input = '';
     while (true) {
       rsize = 0;
       try {
-        rsize = fs.readSync(stdin.fd, buffer, 0, size);
+        rsize = fs.readSync(fd, buffer, 0, bufSize);
       } catch (e) {
-        if (e.code === 'EOF') { break; } // pipe
+        if (e.code === 'EOF') { break; }
         throw e;
       }
       if (rsize === 0) { break; }
       input += buffer.toString(program.encoding, 0, rsize);
     }
-    stdin.pause();
     return input;
   }
 
