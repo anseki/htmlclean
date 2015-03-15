@@ -256,7 +256,7 @@ function getOutFile(path, inPath, root) {
 function mkdirP(path) {
   var curPath = '', dirs = path.split(/\/|\\/), dir;
   while (typeof(dir = dirs.shift()) === 'string') {
-    curPath += (curPath ? pathUtil.sep : '') + dir;
+    curPath += dir + pathUtil.sep;
     if (!fs.existsSync(curPath)) {
       fs.mkdirSync(curPath);
     } else if (!fs.statSync(curPath).isDirectory()) {
