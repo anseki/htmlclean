@@ -52,7 +52,7 @@ npm install -g htmlclean
 ## Command Line Tool
 
 ```shell
-htmlclean [options] [input [output]]
+htmlclean [options] [input1 [input2 ...]]
 ```
 
 Command line tool needs `-g` option when install package.  

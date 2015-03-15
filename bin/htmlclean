@@ -192,7 +192,7 @@ program
       if (line !== '') { lines.push(line); }
       return lines.join('\n  ');
     })(packageInfo.description) + '\n  ' + packageInfo.homepage)
-  .usage('[options] [input [output]]')
+  .usage('[options] [input1 [input2 ...]]')
   .option('-i, --input <input>', 'input file, directory or "-" as STDIN', addList, [])
   .option('-o, --output <output>', 'output file, directory or "-" as STDOUT', addList, [])
   .option('-p, --protect <RegExp>', '"/pattern/flags" for protect', addList, [])
