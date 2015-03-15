@@ -23,154 +23,7 @@ var
   // cache input contents and output fd etc.
   inContents = {},
   outFiles = {'-': {fd: process.stdout.fd, path: 'STDOUT'}},
-  DEFAULT_BUF_SIZE = 1024,
-
-  DESC = function() {
-/*
-
-    input/output
-
-      A argument that have no option is considered as input.
-      For example:
-        htmlclean A.html
-        equals
-        htmlclean -i A.html
-
-      A "-" is specified as STDIN or STDOUT.
-
-      If multiple inputs and outputs are specified, the content from a first
-      input is written to a first output, and the content from a second input
-      is written to a second output..., in this way.
-      The all arguments that have no option are added to last of the inputs
-      list.
-      If no inputs are specified, it's considered as one STDIN.
-      The outputs exceeding inputs are ignored.
-      For example:
-        htmlclean -o A.html -o B.html
-        A first input is STDIN, "B.html" is ignored.
-
-      If a file is specified to the input of a pair and a directory is
-      specified to the output of this pair, the content is written to the same
-      named file in the specified directory.
-      If a file is specified to the input of a pair and the output of this pair
-      isn't specified, the content is written to the file named
-      "<input>.min.<ext>".
-      For example:
-        If the name of file as input is "index.html", then the content is
-        written to "index.min.html".
-      If STDIN is specified to the input of a pair and the output of this pair
-      isn't specified (or a directory is specified), the content is written to
-      STDOUT.
-
-      The input can be Glob pattern like "*.html".
-      For Glob pattern syntax, see:
-        https://github.com/isaacs/node-glob
-        https://github.com/isaacs/minimatch
-
-      If a directory is specified to the input, it is considered as
-      "directory/*.html".
-      If the input of a pair points to multiple files and a directory is
-      specified to the output of this pair, the each content is written to the
-      same named file in the specified directory.
-      If the input of a pair points to multiple files and the output of this
-      pair isn't specified, the each content is written to the file named
-      "<input>.min.<ext>".
-      For example:
-        If the name of file as input is "index.html", then the content is
-        written to "index.min.html".
-      If the input of a pair points to multiple files and a file (or STDOUT) is
-      specified to the output of this pair, a concatenated content from all
-      input files of this pair is written to the output.
-
-      For example:
-
-        * Clean "index.html", and write to "index.min.html".
-
-          htmlclean index.html
-
-        * Clean "index.html", and overwrite it.
-
-          htmlclean index.html -o index.html
-
-        * Clean all HTML files in "src" directory, and write into "public"
-          directory.
-
-          htmlclean src -o public
-
-        * Clean "index.html" in "src" directory, and write into "public"
-          directory.
-
-          htmlclean src/index.html -o public
-
-        * Clean 2 files.
-
-          htmlclean -i A.html -o A.cln.html -i B.html -o B.cln.html
-
-        * Clean 2 files in "src" directory, and write into "public" directory.
-
-          htmlclean -i src/A.html -o public -i src/B.html -o public
-
-        * Equal to above.
-
-          htmlclean -i "src/@(A|B).html" -o public
-
-        * Clean all SVG files.
-
-          htmlclean *.svg
-
-        * Get and clean web page on URL, and write to "index.html".
-          (from STDIN)
-
-          wget -q -O - https://github.com/ | htmlclean -o index.html
-
-        * Clean and compress "index.html", and write to "index.gz".
-          (to STDOUT)
-
-          htmlclean index.html -o - | gzip > index.gz
-
-        * From STDIN to "public/A.html", from "src/B.html" to STDOUT.
-
-          htmlclean -i - -o public/A.html -i src/B.html -o -
-
-        * Clean 3 files, and write into 1 file.
-
-          htmlclean -i head.html -i body.html -i foot.html \
-            -o index.html -o index.html -o index.html
-
-        * Clean all HTML and SVG and PHP files.
-
-          htmlclean *.{html,svg,php}
-
-        * Clean all files that has a number as the first character, and
-          extension is "html" or "htm".
-
-          htmlclean [0-9]*.htm?(l)
-
-    protect/unprotect
-
-      These must be a text like "/pattern/flags" as RegExp.
-      The multiple options can be specified.
-      See https://github.com/anseki/htmlclean/
-
-      For example:
-
-        * For some Template Framework and AngularJS.
-
-          htmlclean \
-            -p "/<\!--%fooTemplate\b.*?%-->/g" \
-            -p "/<\!--%barTemplate\b.*?%-->/g" \
-            -P "/<script [^>]*\btype="text\/ng-template"[\s\S]+?<\/script>/ig"
-
-    Note
-
-      On Windows XP, 2000 + Node v11-, the redirecting doesn't work, the piping
-      works.
-        Use
-        type file.html | htmlclean
-        instead of
-        htmlclean < file.html
-*/
-  }.toString().replace(/function+\W+\*[^]\n|\s+\*\/\s+}$/g, '');
+  DEFAULT_BUF_SIZE = 1024;
 
 function addList(val, list) {
   list.push(val);
@@ -195,12 +48,15 @@ program
   .usage('[options] [input1 [input2 ...]]')
   .option('-i, --input <input>', 'input file, directory or "-" as STDIN', addList, [])
   .option('-o, --output <output>', 'output file, directory or "-" as STDOUT', addList, [])
+  .option('-r, --root <directory>', 'root of directory tree')
   .option('-p, --protect <RegExp>', '"/pattern/flags" for protect', addList, [])
   .option('-P, --unprotect <RegExp>', '"/pattern/flags" for unprotect', addList, [])
   .option('-e, --encoding <encoding>', 'encoding method [utf8]', 'utf8')
   .option('-v, --verbose', 'output I/O information to STDERR')
-  .on('--help',
-    function() { console.log(DESC + (process.platform !== 'win32' ? '\n' : '')); });
+  .on('--help', function() {
+      console.log(fs.readFileSync(__dirname + '/help.txt', {encoding: 'utf8'}) +
+        (process.platform !== 'win32' ? '\n' : ''));
+    });
 program.parse(process.argv);
 
 if (program.args.length) { program.input = program.input.concat(program.args); }
@@ -226,12 +82,23 @@ else if (!program.input.length) { program.input.push('-'); }
   });
 })();
 
+/* jshint eqnull:true */
+if (program.root != null) {
+/* jshint eqnull:false */
+  if (fs.existsSync(program.root) && fs.statSync(program.root).isDirectory()) {
+    program.root = fs.realpathSync(program.root);
+  } else {
+    console.error('This is not directory: %s', program.root);
+    process.exit(1);
+  }
+}
+
 // I/O loop
 program.input.forEach(function(input, index) {
   var output = program.output[index];
   printInfo('[ARGUMENT]\n  INPUT : %s\n  OUTPUT: %s', input || '', output || '');
   try {
-    pair(input, output);
+    pair(input, output, program.root);
   } catch (e) {
     console.error(e + '');
   }
@@ -249,7 +116,7 @@ program.input.forEach(function(input, index) {
 
 process.exit();
 
-function pair(input, output) {
+function pair(input, output, root, recursive) {
   var paths, inContent, outFile;
 
   // normalize input
@@ -261,11 +128,19 @@ function pair(input, output) {
       return;
     } else if (paths.length > 1) {
       paths.forEach(function(path) {
-        pair(path, output);
+        // These `\`s are separators of Win not escape characters,
+        // because these are not patterns.
+        pair(path.replace(/\\/g, '/'), output, root, true);
       });
       return;
     } else if (fs.statSync(paths[0]).isDirectory()) {
-      pair(paths[0] + (paths[0].substr(-1) !== '/' ? '/' : '') + '*.html', output);
+      if (!recursive && typeof root !== 'string')
+        { root = fs.realpathSync(paths[0]); } // set default
+      // These `\`s are separators of Win not escape characters,
+      // because these are not patterns.
+      paths[0] = paths[0].replace(/\\/g, '/');
+      pair(paths[0] + (paths[0].substr(-1) !== '/' ? '/' : '') + '**/*.html',
+        output, root, true);
       return;
     } else if (!fs.statSync(paths[0]).isFile()) {
       return;
@@ -276,7 +151,7 @@ function pair(input, output) {
   inContent = getInContent(input);
 
   // normalize & open output
-  outFile = getOutFile(output, input);
+  outFile = getOutFile(output, input, root);
 
   fs.writeSync(outFile.fd, inContent.content, null, program.encoding);
   // fsyncSync gets an error (bad file descriptor) when STDOUT is TTY of csh or DOS.
@@ -325,7 +200,7 @@ function getInContent(path) { // path was normalized
   return inContents[path];
 }
 
-function getOutFile(path, inPath) {
+function getOutFile(path, inPath, root) {
   var normalPath, key, fd;
 
   function getMinPath(path) {
@@ -335,7 +210,20 @@ function getOutFile(path, inPath) {
   }
 
   function getPathInDir(path, dirPath) {
-    return pathUtil.join(dirPath, pathUtil.basename(path));
+    var pathInDir, dirPathInDir;
+    // root and path (inPath) are already normal. (separators are correct)
+    if (typeof root === 'string' && root.substr(-1) !== pathUtil.sep)
+      { root += pathUtil.sep; }
+    if (typeof root === 'string' &&
+        (process.platform === 'win32' ? path.toLowerCase().indexOf(root.toLowerCase()) :
+          path.indexOf(root)) === 0) {
+      pathInDir = pathUtil.join(dirPath, path.substr(root.length));
+      dirPathInDir = pathUtil.dirname(pathInDir);
+      mkdirP(dirPathInDir);
+      return pathInDir;
+    } else {
+      return pathUtil.join(dirPath, pathUtil.basename(path));
+    }
   }
 
   if (typeof path !== 'string' || path === '') { // inPath must be given, if path isn't
@@ -363,6 +251,19 @@ function getOutFile(path, inPath) {
     outFiles[key] = {fd: fd, path: fs.realpathSync(normalPath)};
   }
   return outFiles[key];
+}
+
+function mkdirP(path) {
+  var curPath = '', dirs = path.split(/\/|\\/), dir;
+  while (typeof(dir = dirs.shift()) === 'string') {
+    curPath += (curPath ? pathUtil.sep : '') + dir;
+    if (!fs.existsSync(curPath)) {
+      fs.mkdirSync(curPath);
+    } else if (!fs.statSync(curPath).isDirectory()) {
+      console.error('Non directory already exists: %s', curPath);
+      process.exit(1);
+    }
+  }
 }
 
 function printInfo() {
