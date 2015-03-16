@@ -219,7 +219,7 @@ function getOutFile(path, inPath, root) {
           path.indexOf(root)) === 0) {
       pathInDir = pathUtil.join(dirPath, path.substr(root.length));
       dirPathInDir = pathUtil.dirname(pathInDir);
-      mkdirP(dirPathInDir);
+      mkdirParents(dirPathInDir);
       return pathInDir;
     } else {
       return pathUtil.join(dirPath, pathUtil.basename(path));
@@ -253,17 +253,17 @@ function getOutFile(path, inPath, root) {
   return outFiles[key];
 }
 
-function mkdirP(path) {
-  var curPath = '', dirs = path.split(/\/|\\/), dir;
-  while (typeof(dir = dirs.shift()) === 'string') {
-    curPath += dir + pathUtil.sep;
-    if (!fs.existsSync(curPath)) {
-      fs.mkdirSync(curPath);
-    } else if (!fs.statSync(curPath).isDirectory()) {
-      console.error('Non directory already exists: %s', curPath);
-      process.exit(1);
+// mkdir -p
+function mkdirParents(dirPath) {
+  dirPath.split(/\/|\\/).reduce(function(parents, dir) {
+    var path = pathUtil.resolve((parents += dir + pathUtil.sep)); // normalize
+    if (!fs.existsSync(path)) {
+      fs.mkdirSync(path);
+    } else if (!fs.statSync(path).isDirectory()) {
+      throw new Error('Non directory already exists: ' + path);
     }
-  }
+    return parents;
+  }, '');
 }
 
 function printInfo() {
