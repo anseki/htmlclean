@@ -14,17 +14,15 @@ htmlclean removes the following texts.
 + The more than two whitespaces, tabs and line-breaks (suppressed to one space).
 + HTML/SVG comments.
 
-The more than two whitespaces (even if those are divided by HTML/SVG tags) in a line are suppressed.
+For example: The more than two whitespaces (even if those are divided by HTML/SVG tags) in a line are suppressed.
 
-**Example:**
-
-Before
+* Before
 
 ```html
 <p>The <strong> clean <span> <em> HTML is here. </em> </span> </strong> </p>
 ```
 
-After
+* After
 
 ```html
 <p>The <strong>clean <span><em>HTML is here.</em></span></strong></p>
@@ -34,18 +32,19 @@ The whitespace that was right side of `<strong>` was removed, and the left side 
 The both side whitespaces of `<em>` were removed.
 
 ## Protecting
-The following texts are protected (excluded from removing).
 
-+ The texts in `textarea`, `script` and `style` elements, and text nodes in `pre` elements.
-+ The quoted texts in tag attribute.
-+ The texts in SSI tags (PHP, JSP, ASP/ASP.NET and Apache SSI).
+The following texts are protected (excluded from [Removing](#removing)).
+
++ The texts in `textarea`, `script` and `style` elements, and the text nodes in `pre` elements.
++ The quoted texts in the tag attributes.
++ The texts in the SSI tags (PHP, JSP, ASP/ASP.NET and Apache SSI).
 + IE conditional comments. e.g. `<!--[if lt IE 7]>`
 + The texts between `<!--[htmlclean-protect]-->` and `<!--[/htmlclean-protect]-->`.
-+ The texts that is matched by `protect` option (see "Options").
++ The texts that is matched by the [`protect`](#protect) option.
 
 ## Installation
 
-```
+```shell
 npm install -g htmlclean
 ```
 
@@ -58,39 +57,46 @@ htmlclean [options] [input1 [input2 ...]]
 Command line tool needs `-g` option when install package.  
 See `htmlclean -h` for usage.
 
-### Example
+### Examples
 
 * Clean `index.html`, and write to `index.min.html`.
+
 ```shell
 htmlclean index.html
 ```
 
 * Clean `index.html`, and overwrite it.
+
 ```shell
 htmlclean index.html -o index.html
 ```
 
 * Clean all HTML files in `src` directory, and write into `public` directory.
+
 ```shell
 htmlclean src -o public
 ```
 
 * Clean all SVG files.
+
 ```shell
 htmlclean *.svg
 ```
 
 * Get and clean web page on URL, and write to `index.html`.
+
 ```shell
 wget -q -O - https://github.com/ | htmlclean -o index.html
 ```
 
 * Clean and compress `index.html`, and write to `index.gz`.
+
 ```shell
 htmlclean index.html -o - | gzip > index.gz
 ```
 
 * Clean 3 files, and write into 1 file.
+
 ```shell
 htmlclean -i head.html -i body.html -i foot.html \
 -o index.html -o index.html -o index.html
@@ -98,10 +104,11 @@ htmlclean -i head.html -i body.html -i foot.html \
 
 ### Drag & Drop & Clean
 
-In GUI environment, drag-and-drop the target file or directory or multiple items to the `htmlclean` icon. Or the short cut (alias, link, etc.) icon on desktop also works.  
+In the GUI environment, drag-and-drop the target file or directory or multiple items to the `htmlclean` icon. Or the short cut (alias, link, etc.) icon on the desktop also works.  
 ![desktop](gui.png)
 
 The `htmlclean` icon is found in:
+
 ```shell
 npm bin -g
 ```
@@ -112,7 +119,7 @@ npm bin -g
 cleanHtml = htmlclean(sourceHtml[, options])
 ```
 
-`require('htmlclean')` returns a Function. This Function accepts source HTML, and returns clean HTML. If you want, you can specify options to second argument (see "Options").
+`require('htmlclean')` returns a Function. This Function accepts a source HTML, and returns a clean HTML. If you want, you can specify an `options` Object to second argument (see [Options](#options)).
 
 ```js
 var htmlclean = require('htmlclean');
@@ -123,18 +130,21 @@ html = require('htmlclean')(html);
 ```
 
 ### Options
-You can specify `options` Object to second argument. This Object can have following properties.
 
-#### protect
+You can specify an `options` Object to second argument. This Object can have following properties.
+
+#### `protect`
+
 Type: RegExp or Array
 
-The texts which are matched to this RegExp are protected in addition to above "Protecting" list. The multiple RegExps can be specified via Array.
+The texts which are matched to this RegExp are protected in addition to above [Protecting](#protecting) list. The multiple RegExps can be specified via an Array.
 
-#### unprotect
+#### `unprotect`
+
 Type: RegExp or Array
 
-The texts which are matched to this RegExp are cleaned even if the text is included in above "Protecting" list. The multiple RegExps can be specified via Array.  
-For example, HTML as template in `<script type="text/x-handlebars-template">` is cleaned via following.
+The texts which are matched to this RegExp are cleaned even if that text is included in above [Protecting](#protecting) list. The multiple RegExps can be specified via an Array.  
+For example, a HTML as template in `<script type="text/x-handlebars-template">` is cleaned via following.
 
 ```js
 html = htmlclean(html, {
@@ -142,20 +152,21 @@ html = htmlclean(html, {
 });
 ```
 
-The `x-handlebars-template` in `type` attribute above is case of using the Template Framework [Handlebars](http://handlebarsjs.com/). e.g. [AngularJS](https://angularjs.org/) requires `ng-template` instead of it.
+The `x-handlebars-template` in a `type` attribute above is case of using the Template Framework [Handlebars](http://handlebarsjs.com/). e.g. [AngularJS](https://angularjs.org/) requires `ng-template` instead of it.
 
-*NOTE:* The RegExp has to match to text which is not a part of protected text. For example, the RegExp matches `color: red;` in `<style>` element, but this is not cleaned because all texts in the `<style>` element are protected. (`color: red;` is a part of protected text.) The RegExp has to match to text which is all of `<style>` element like `/<style[\s\S]+?<\/style>/`.
+*NOTE:* The RegExp has to match to a text which is not a part of the protected text. For example, the RegExp matches `color: red;` in `<style>` element, but this is not cleaned because all texts in the `<style>` element are protected. `color: red;` is a part of the protected text. The RegExp has to match to a text which is all of `<style>` element like `/<style[\s\S]+?<\/style>/`.
 
-#### edit
+#### `edit`
+
 Type: Function
 
-This Function more edits HTML.  
-The protected texts are hidden from HTML, and HTML is passed to this Function. Therefore, this Function doesn't break protected texts. The HTML which returned from this Function is restored.  
-*NOTE:* Markers `\fID\f` (`\f` is "form feed" `\x0C` code, `ID` is number) are inserted to HTML instead of protected texts. This Function can remove these markers, but can't add new markers. (Invalid markers will be just removed.)
+This Function more edits a HTML.  
+The protected texts are hidden from a HTML, and a HTML is passed to this Function. Therefore, this Function doesn't break the protected texts. A HTML which returned from this Function is restored.  
+*NOTE:* The markers `\fID\f` (`\f` is "form feed" `\x0C` code, `ID` is number) are inserted to a HTML instead of the protected texts. This Function can remove these markers, but can't add new markers. (Invalid markers will be just removed.)
 
 ### Example
 
-See the source HTML file and results HTML files in the `sample` directory.
+See the source HTML file and the result HTML files in the `sample` directory.
 
 ```js
 var htmlclean = require('htmlclean'),
@@ -177,22 +188,13 @@ fs.writeFileSync('./after2.html', htmlAfter2);
 
 ### Malformed Nested Tags, and Close Tags in Script
 
-htmlclean can't parse malformed nested tags like `<p>foo<pre>bar</p>baz</pre>` precisely. And close tags in script like `<script>var foo = '</script>';</script>` too. Or, `?>` in PHP code, etc.  
+htmlclean can't parse the malformed nested tags like `<p>foo<pre>bar</p>baz</pre>` precisely. And the close tags in script like `<script>var foo = '</script>';</script>` too. Or, `?>` in PHP code, etc.  
 Some language parsers also mistake, then those recommend us to write code like `'<' + '/script>'`. This is better even if htmlclean is not used.
 
 ### SSI Tags in HTML Comments
 
-htmlclean removes HTML/SVG comments that include SSI tag like `<!-- Info for admin - Foo:<?= expression ?> -->`. I think it's no problem because htmlclean is used to minify HTML. If that SSI tag includes important code for logic, use a `protect` option, or `<!--[htmlclean-protect]-->` and `<!--[/htmlclean-protect]-->`.
+htmlclean removes the HTML/SVG comments that include the SSI tag like `<!-- Info for admin - Foo:<?= expression ?> -->`. I think it's no problem because htmlclean is used to minify HTML. If that SSI tag includes the important code for logic, use a `protect` option, or `<!--[htmlclean-protect]-->` and `<!--[/htmlclean-protect]-->`.
 
 ## See Also
 
 If you want to control details of editing, [HtmlCompressor](http://code.google.com/p/htmlcompressor/), [HTMLMinifier](https://github.com/kangax/html-minifier) and others are better choice.
-
-## History
- * 2015-02-22			v2.5.0			Change: arguments that have no option.
- * 2015-02-21			v2.4.0			Add: Command line tool.
- * 2015-02-13			v2.3.0			Support SVG 1.1 Second Edition
- * 2014-08-30			v2.2.0			Add more SSI tags (PHP, etc.) to protection.
- * 2014-06-15			v2.1.0			Add `unprotect` option.
- * 2013-11-06			v2.0.0			Change logic of handling whitespaces and others.
- * 2013-08-27			v0.1.0			Initial release.
