@@ -55,7 +55,8 @@ htmlclean [options] [input1 [input2 ...]]
 ```
 
 Command line tool needs `-g` option when install package.  
-See `htmlclean -h` for usage.
+
+See [README-CLI.md](README-CLI.md) for usage.
 
 ### Examples
 
