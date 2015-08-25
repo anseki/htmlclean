@@ -1,0 +1,38 @@
+{
+  "name": "htmlclean",
+  "version": "2.6.5",
+  "description": "Simple and lightweight cleaner that just removes whitespaces, comments, etc. to minify HTML/SVG. This differs from others in that this removes whitespaces, line-breaks, etc. as much as possible.",
+  "keywords": [
+    "html",
+    "svg",
+    "clean",
+    "whitespace",
+    "linebreak",
+    "comment",
+    "minify",
+    "compress",
+    "lightweight"
+  ],
+  "main": "./lib/htmlclean.js",
+  "dependencies": {
+    "commander": "^2.6.0",
+    "glob": "~4.4.0"
+  },
+  "homepage": "https://github.com/anseki/htmlclean",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/anseki/htmlclean.git"
+  },
+  "moduleType": "node",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "license": "MIT",
+  "authors": [
+    "anseki <AnSeki.aff@gmail.com>"
+  ]
+}
