@@ -22,7 +22,7 @@ htmlclean [options] [input1 [input2 ...]]
 
 ### input/output
 
-A argument that have no option is considered as input.  
+An argument that have no option is considered as input.  
 For example:
 
 ```shell
@@ -38,7 +38,7 @@ htmlclean -i A.html
 A `-` is specified as STDIN or STDOUT.
 
 If multiple inputs and outputs are specified, the content from a first input is written to a first output, and the content from a second input is written to a second output..., in this way.  
-The all arguments that have no option are added to last of the inputs list.  
+The all arguments that have no option are added to last of the input list.  
 If no inputs are specified, it's considered as one STDIN.  
 The outputs exceeding inputs are ignored.  
 For example:
