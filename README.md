@@ -3,18 +3,19 @@
 * [Grunt](http://gruntjs.com/) plugin: [grunt-htmlclean](https://github.com/anseki/grunt-htmlclean)
 * [gulp](http://gulpjs.com/) plugin: [gulp-htmlclean](https://github.com/anseki/gulp-htmlclean)
 
-Simple and lightweight cleaner that just removes whitespaces, comments, etc. to minify HTML/SVG.  
-This differs from others in that this removes whitespaces, line-breaks, etc. as much as possible.
+Simple and safety cleaner without changing the structure to minify HTML/SVG.
 
 ## Removing
+
 htmlclean removes the following texts.
 
 + The leading whitespaces, tabs and line-breaks, and the trailing whitespaces, tabs and line-breaks.
 + The unneeded whitespaces, tabs and line-breaks between HTML/SVG tags.
 + The more than two whitespaces, tabs and line-breaks (suppressed to one space).
 + HTML/SVG comments.
++ The unneeded whitespaces, tabs and line-breaks, meaningless zeros, numbers, signs, etc. in the path data of SVG (e.g. `d` attribute of `path` element).
 
-For example: The more than two whitespaces (even if those are divided by HTML/SVG tags) in a line are suppressed.
+For example, the more than two whitespaces (even if those are divided by HTML/SVG tags) in a line are suppressed:
 
 * Before
 
@@ -30,6 +31,10 @@ For example: The more than two whitespaces (even if those are divided by HTML/SV
 
 The whitespace that was right side of `<strong>` was removed, and the left side was kept.  
 The both side whitespaces of `<em>` were removed.
+
+For example, in a case of this SVG file, 4,784 bytes were reduced:
+
+<img src="Ghostscript_Tiger.svg" width="300" height="300">
 
 ## Protecting
 
@@ -145,7 +150,7 @@ The texts which are matched to this RegExp are protected in addition to above [P
 Type: RegExp or Array
 
 The texts which are matched to this RegExp are cleaned even if that text is included in above [Protecting](#protecting) list. The multiple RegExps can be specified via an Array.  
-For example, a HTML as template in `<script type="text/x-handlebars-template">` is cleaned via following.
+For example, a HTML as template in `<script type="text/x-handlebars-template">` is cleaned via following:
 
 ```js
 html = htmlclean(html, {
@@ -195,6 +200,11 @@ Some language parsers also mistake, then those recommend us to write code like `
 ### SSI Tags in HTML Comments
 
 htmlclean removes the HTML/SVG comments that include the SSI tag like `<!-- Info for admin - Foo:<?= expression ?> -->`. I think it's no problem because htmlclean is used to minify HTML. If that SSI tag includes the important code for logic, use a `protect` option, or `<!--[htmlclean-protect]-->` and `<!--[/htmlclean-protect]-->`.
+
+### htmlclean Work
+
+htmlclean never changes the structure of the document even if the elements or attributes look like meaningless, because it might be used by your program, and those are not work htmlclean should do. It should prevent unexpectedly breaking the data after all your efforts.  
+If you would like to enforce rules relating to code style, check out the documents such as the code style guide.
 
 ## See Also
 

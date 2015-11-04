@@ -1,8 +1,8 @@
 {
   "name": "htmlclean",
-  "version": "2.6.4",
+  "version": "2.7.0",
   "title": "htmlclean",
-  "description": "Simple and lightweight cleaner that just removes whitespaces, comments, etc. to minify HTML/SVG. This differs from others in that this removes whitespaces, line-breaks, etc. as much as possible.",
+  "description": "Simple and safety cleaner without changing the structure to minify HTML/SVG.",
   "keywords": [
     "html",
     "svg",
