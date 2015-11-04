@@ -34,7 +34,7 @@ The both side whitespaces of `<em>` were removed.
 
 For example, in a case of this SVG file, 4,784 bytes were reduced:
 
-<img src="https://cdn.rawgit.com/anseki/htmlclean/master/Ghostscript_Tiger.svg" width="300" height="300">
+<img src="https://rawgit.com/anseki/htmlclean/master/Ghostscript_Tiger.svg" width="300" height="300">
 
 ## Protecting
 
