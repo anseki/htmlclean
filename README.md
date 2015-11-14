@@ -33,7 +33,7 @@ htmlclean removes following texts.
 + Unneeded whitespaces between HTML/SVG tags
 + More than two whitespaces (reduced to one space)
 + HTML/SVG comments
-+ Unneeded whitespaces, meaningless zeros, numbers, signs, etc. in path data of SVG (e.g. some attribute's value of `path`, `animateMotion`, etc. elements)
++ Unneeded whitespaces, meaningless zeros, numbers, signs, etc. in path data of SVG (e.g. `d` attribute of `path` element, `path` attribute of `animateMotion` element, etc.)
 
 ## Protecting
 
