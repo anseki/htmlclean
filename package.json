@@ -1,6 +1,6 @@
 {
   "name": "htmlclean",
-  "version": "2.7.3",
+  "version": "2.7.4",
   "title": "htmlclean",
   "description": "Simple and safety cleaner without changing the structure to minify HTML/SVG.",
   "keywords": [
