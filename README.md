@@ -140,13 +140,13 @@ You can specify an `options` Object to second argument. This Object can have fol
 
 #### `protect`
 
-Type: RegExp or Array
+*Type:* RegExp or Array
 
 Texts which are matched to this RegExp are protected in addition to above [Protecting](#protecting) list. Multiple RegExps can be specified via an Array.
 
 #### `unprotect`
 
-Type: RegExp or Array
+*Type:* RegExp or Array
 
 Texts which are matched to this RegExp are cleaned even if those text are included in above [Protecting](#protecting) list. Multiple RegExps can be specified via an Array.
 
@@ -164,7 +164,7 @@ The `x-handlebars-template` in the `type` attribute above is a case of using Tem
 
 #### `edit`
 
-Type: Function
+*Type:* Function
 
 This Function more edits a HTML/SVG source.  
 Protected texts are hidden from the HTML/SVG source, and the HTML/SVG source is passed to this Function. Therefore, this Function doesn't break the protected texts. A HTML/SVG source which returned from this Function is restored.
