@@ -21,7 +21,7 @@ After:
 
 The whitespace that was on the right side of the `<strong>` was removed, and one on the left side was kept. And whitespaces on the both side of the `<em>` were removed.
 
-For example, unneeded whitespaces in path data of SVG are reduced. In the case of this SVG file, 4,784 bytes were reduced:
+For example, unneeded whitespaces in path data of SVG are reduced. In the case of this SVG file, 4,784 bytes were reduced without changing its structure:
 
 <img src="https://rawgit.com/anseki/htmlclean/master/Ghostscript_Tiger.svg" width="300" height="300">
 
@@ -169,7 +169,7 @@ The `x-handlebars-template` in the `type` attribute above is a case of using Tem
 This Function more edits a HTML/SVG source.  
 Protected texts are hidden from the HTML/SVG source, and the HTML/SVG source is passed to this Function. Therefore, this Function doesn't break the protected texts. A HTML/SVG source which returned from this Function is restored.
 
-*NOTE:* Markers `\fID\f` (`\f` is "form feed" `\x0C` code, `ID` is number) are inserted to a HTML/SVG source instead of protected texts. This Function can remove those markers, but can't add new markers. (Invalid markers will be just removed.)
+*NOTE:* Markers `\fID\x07` (`\f` is "form feed" `\x0C` code, `\x07` is "bell", `ID` is number) are inserted to a HTML/SVG source instead of protected texts. This Function can remove those markers, but can't add new markers. (Invalid markers will be just removed.)
 
 ### Example
 
