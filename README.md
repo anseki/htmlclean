@@ -1,5 +1,7 @@
 # htmlclean
 
+[![npm](https://img.shields.io/npm/v/htmlclean.svg)](https://www.npmjs.com/package/htmlclean) [![GitHub issues](https://img.shields.io/github/issues/anseki/htmlclean.svg)](https://github.com/anseki/htmlclean/issues) [![David](https://img.shields.io/david/anseki/htmlclean.svg)](package.json) [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE-MIT)
+
 * [Grunt](http://gruntjs.com/) plugin: [grunt-htmlclean](https://github.com/anseki/grunt-htmlclean)
 * [gulp](http://gulpjs.com/) plugin: [gulp-htmlclean](https://github.com/anseki/gulp-htmlclean)
 * [webpack](http://webpack.github.io/) loader: [htmlclean-loader](https://github.com/anseki/htmlclean-loader)
