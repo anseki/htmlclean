@@ -1,6 +1,6 @@
 # htmlclean
 
-[![npm](https://img.shields.io/npm/v/htmlclean.svg)](https://www.npmjs.com/package/htmlclean) [![GitHub issues](https://img.shields.io/github/issues/anseki/htmlclean.svg)](https://github.com/anseki/htmlclean/issues) [![David](https://img.shields.io/david/anseki/htmlclean.svg)](package.json) [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE-MIT)
+[![npm](https://img.shields.io/npm/v/htmlclean.svg)](https://www.npmjs.com/package/htmlclean) [![GitHub issues](https://img.shields.io/github/issues/anseki/htmlclean.svg)](https://github.com/anseki/htmlclean/issues) [![dependencies](https://img.shields.io/badge/dependencies-No%20dependency-brightgreen.svg)](package.json) [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE-MIT)
 
 ***Since v3, the CLI was separated into [htmlclean-cli](https://github.com/anseki/htmlclean-cli).***
 
