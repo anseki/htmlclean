@@ -2,6 +2,7 @@
 
 [![npm](https://img.shields.io/npm/v/htmlclean.svg)](https://www.npmjs.com/package/htmlclean) [![GitHub issues](https://img.shields.io/github/issues/anseki/htmlclean.svg)](https://github.com/anseki/htmlclean/issues) [![David](https://img.shields.io/david/anseki/htmlclean.svg)](package.json) [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE-MIT)
 
+* Command Line Tool: [htmlclean-cli](https://github.com/anseki/htmlclean-cli)
 * [Grunt](http://gruntjs.com/) plugin: [grunt-htmlclean](https://github.com/anseki/grunt-htmlclean)
 * [gulp](http://gulpjs.com/) plugin: [gulp-htmlclean](https://github.com/anseki/gulp-htmlclean)
 * [webpack](http://webpack.github.io/) loader: [htmlclean-loader](https://github.com/anseki/htmlclean-loader)
@@ -49,85 +50,13 @@ Following texts are protected (excluded from [Removing](#removing) list).
 + Texts between `<!--[htmlclean-protect]-->` and `<!--[/htmlclean-protect]-->`
 + Texts that is matched by [`protect`](#protect) option
 
-## Installation
-
-```shell
-npm install -g htmlclean
-```
-
-## Command Line Tool
-
-```shell
-htmlclean [options] [input1 [input2 ...]]
-```
-
-Command line tool needs `-g` option when install package.  
-
-See [README-CLI.md](README-CLI.md) for usage.
-
-### Examples
-
-* Clean `index.html`, and write to `index.min.html`.
-
-```shell
-htmlclean index.html
-```
-
-* Clean `index.html`, and overwrite it.
-
-```shell
-htmlclean index.html -o index.html
-```
-
-* Clean all HTML files in `src` directory, and write into `public` directory.
-
-```shell
-htmlclean src -o public
-```
-
-* Clean all SVG files.
-
-```shell
-htmlclean *.svg
-```
-
-* Get and clean web page on URL, and write to `index.html`.
-
-```shell
-wget -q -O - https://github.com/ | htmlclean -o index.html
-```
-
-* Clean and compress `index.html`, and write to `index.gz`.
-
-```shell
-htmlclean index.html -o - | gzip > index.gz
-```
-
-* Clean 3 files, and write into 1 file.
-
-```shell
-htmlclean -i head.html -i body.html -i foot.html \
--o index.html -o index.html -o index.html
-```
-
-### Drag & Drop & Clean
-
-In GUI environment, you can drag-and-drop a target file or directory or multiple items to the `htmlclean` icon. Or a short cut (alias, link, etc.) icon on the desktop also works.  
-![desktop](gui.png)
-
-The `htmlclean` icon is found in:
-
-```shell
-npm bin -g
-```
-
-## Node Module
+## Usage
 
 ```js
 cleanHtml = htmlclean(sourceHtml[, options])
 ```
 
-`require('htmlclean')` returns a Function. This Function accepts a HTML/SVG source, and returns a clean HTML/SVG source. If you want, you can specify an `options` Object to second argument (see [Options](#options)).
+`require('htmlclean')` returns a Function. This Function accepts a HTML/SVG source, and returns a clean HTML/SVG source. You can specify an `options` Object for second argument (see [Options](#options)).
 
 ```js
 var htmlclean = require('htmlclean');
@@ -139,19 +68,19 @@ html = require('htmlclean')(html);
 
 ### Options
 
-You can specify an `options` Object to second argument. This Object can have following properties.
+You can specify an `options` Object for second argument. This Object can have following properties.
 
 #### `protect`
 
 *Type:* RegExp or Array
 
-Texts which are matched to this RegExp are protected in addition to above [Protecting](#protecting) list. Multiple RegExps can be specified via an Array.
+Texts which are matched to this RegExp are protected in addition to [Protecting](#protecting) list. Multiple RegExps can be specified via an Array.
 
 #### `unprotect`
 
 *Type:* RegExp or Array
 
-Texts which are matched to this RegExp are cleaned even if those text are included in above [Protecting](#protecting) list. Multiple RegExps can be specified via an Array.
+Texts which are matched to this RegExp are cleaned even if those text are included in [Protecting](#protecting) list. Multiple RegExps can be specified via an Array.
 
 For example, a HTML source as template in `<script type="text/x-handlebars-template">` is cleaned via following code:
 
@@ -176,7 +105,7 @@ Protected texts are hidden from the HTML/SVG source, and the HTML/SVG source is 
 
 ### Example
 
-See a source HTML file and result HTML files in a `sample` directory.
+See a source HTML file and result HTML files in the `examples` directory.
 
 ```js
 var htmlclean = require('htmlclean'),
@@ -213,3 +142,7 @@ If you would like to enforce rules relating to code style, check out documents s
 ## See Also
 
 If you want to control details of editing, [HtmlCompressor](http://code.google.com/p/htmlcompressor/), [HTMLMinifier](https://github.com/kangax/html-minifier) and others are better choice.
+
+---
+
+Thanks for images: [Wikimedia Commons](https://commons.wikimedia.org/)

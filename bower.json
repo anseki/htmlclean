@@ -14,10 +14,6 @@
     "lightweight"
   ],
   "main": "./lib/htmlclean.js",
-  "dependencies": {
-    "commander": "^2.6.0",
-    "glob": "^7.1.1"
-  },
   "homepage": "https://github.com/anseki/htmlclean",
   "repository": {
     "type": "git",
