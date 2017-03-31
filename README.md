@@ -45,7 +45,7 @@ htmlclean removes following texts.
 
 ## Protecting
 
-Following texts are protected (excluded from [Removing](#removing) list).
+Following texts are protected (excluded from the [Removing](#removing) list).
 
 + Texts in `textarea`, `script` and `style` elements, and text nodes in `pre` elements
 + Quoted texts in tag attributes except path data of SVG
@@ -78,13 +78,13 @@ You can specify an `options` Object for second argument. This Object can have fo
 
 *Type:* RegExp or Array
 
-Texts which are matched to this RegExp are protected in addition to [Protecting](#protecting) list. Multiple RegExps can be specified via an Array.
+Texts which are matched to this RegExp are protected in addition to the [Protecting](#protecting) list. Multiple RegExps can be specified via an Array.
 
 #### `unprotect`
 
 *Type:* RegExp or Array
 
-Texts which are matched to this RegExp are cleaned even if those text are included in [Protecting](#protecting) list. Multiple RegExps can be specified via an Array.
+Texts which are matched to this RegExp are cleaned even if those text are included in the [Protecting](#protecting) list. Multiple RegExps can be specified via an Array.
 
 For example, a HTML source as template in `<script type="text/x-handlebars-template">` is cleaned via following code:
 
@@ -102,10 +102,10 @@ The `x-handlebars-template` in the `type` attribute above is a case of using Tem
 
 *Type:* Function
 
-This Function more edits a HTML/SVG source.  
-Protected texts are hidden from the HTML/SVG source, and the HTML/SVG source is passed to this Function. Therefore, this Function doesn't break the protected texts. A HTML/SVG source which returned from this Function is restored.
+This Function more edits the HTML/SVG source.  
+Protected texts are hidden from the HTML/SVG source, and the HTML/SVG source is passed to this Function. Therefore, this Function doesn't break the protected texts. The HTML/SVG source which returned from this Function is restored.
 
-*NOTE:* Markers `\fID\x07` (`\f` is "form feed" `\x0C` code, `\x07` is "bell", `ID` is number) are inserted to a HTML/SVG source instead of protected texts. This Function can remove those markers, but can't add new markers. (Invalid markers will be just removed.)
+*NOTE:* Markers `\fID\x07` (`\f` is "form feed" `\x0C` code, `\x07` is "bell", `ID` is number) are inserted to the HTML/SVG source instead of protected texts. This Function can remove those markers, but can't add new markers. (Invalid markers will be just removed.)
 
 ### Example
 
