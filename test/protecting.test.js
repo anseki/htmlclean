@@ -123,4 +123,16 @@ describe('Protecting', () => {
       .to.equal('A B <textarea>  C\n\nD  </textarea> E F');
   });
 
+  it('should protect inner when options.protect includes options.unprotect', () => {
+    expect(htmlclean('A  B  <textarea>  C\n\nD  </textarea>  E  F', {
+      unprotect: /C[^]*?D/g
+    })).to.equal('A B <textarea>  C\n\nD  </textarea> E F');
+  });
+
+  it('should not protect inner when options.unprotect includes options.protect', () => {
+    expect(htmlclean('A  B  <textarea>  C\n\nD  </textarea>  E  F', {
+      unprotect: /B[^]*?E/g
+    })).to.equal('A B <textarea>C D</textarea> E F');
+  });
+
 });

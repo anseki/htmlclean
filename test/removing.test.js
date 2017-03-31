@@ -118,6 +118,12 @@ describe('Removing', () => {
     it('should protect quoted value', () => {
       expect(htmlclean('<   span  ATTR =  "  A  \n\n B  " > A </span> B'))
         .to.equal(' <span ATTR="  A  \n\n B  ">A</span> B');
+      // Invalid tag (can't get tag name)
+      expect(htmlclean('<   //span  ATTR =  "  A  \n\n B  " > A </span> B'))
+        .to.equal('<//span ATTR="  A  \n\n B  "> A</span> B');
+      // No attribute name
+      expect(htmlclean('<   span    "  A  \n\n B  " > A </span> B'))
+        .to.equal(' <span "  A  \n\n B  ">A</span> B');
     });
 
     describe('path data', () => {
@@ -139,8 +145,8 @@ describe('Removing', () => {
       });
 
       it('should remove same command name', () => {
-        expect(htmlclean('A <path d="V 200 L 2, 4 L 8, 16 V 100"/> B'))
-          .to.equal('A<path d="V200L2 4 8 16V100"/> B');
+        expect(htmlclean('A <path d="V 200 L 2, 4 L 8, 16 V 100 z"/> B'))
+          .to.equal('A<path d="V200L2 4 8 16V100z"/> B');
       });
 
       it('should normalize number', () => {
@@ -151,8 +157,24 @@ describe('Removing', () => {
         expect(htmlclean('A <path d="V200."/> B')).to.equal('A<path d="V200"/> B'); //  no fraction
         expect(htmlclean('A <path d="V+0 H0"/> B')).to.equal('A<path d="V0H0"/> B');
         expect(htmlclean('A <path d="V-0."/> B')).to.equal('A<path d="V0"/> B');
+
+        // Number separator
+        expect(htmlclean('A <path d="L 05, 0.5"/> B')).to.equal('A<path d="L5 .5"/> B');
+
+        // exponent
+        expect(htmlclean('A <path d="V999e1"/> B')).to.equal('A<path d="V999e1"/> B');
+        expect(htmlclean('A <path d="V999e+1"/> B')).to.equal('A<path d="V999e1"/> B');
+        expect(htmlclean('A <path d="V999e001"/> B')).to.equal('A<path d="V999e1"/> B');
+        expect(htmlclean('A <path d="V999e+001"/> B')).to.equal('A<path d="V999e1"/> B');
+        expect(htmlclean('A <path d="V999e-001"/> B')).to.equal('A<path d="V999e-1"/> B');
+        expect(htmlclean('A <path d="V999e+0"/> B')).to.equal('A<path d="V999"/> B');
+        expect(htmlclean('A <path d="V999e-0"/> B')).to.equal('A<path d="V999"/> B');
+        expect(htmlclean('A <path d="V999e0"/> B')).to.equal('A<path d="V999"/> B');
       });
 
+      it('should remove invalid command', () => {
+        expect(htmlclean('A <path d="0,  0  "/> B')).to.equal('A<path d=""/> B');
+      });
     });
 
   });
