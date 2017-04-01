@@ -9,7 +9,7 @@
 * Command Line Tool: [htmlclean-cli](https://github.com/anseki/htmlclean-cli)
 * [Grunt](http://gruntjs.com/) plugin: [grunt-htmlclean](https://github.com/anseki/grunt-htmlclean)
 * [gulp](http://gulpjs.com/) plugin: [gulp-htmlclean](https://github.com/anseki/gulp-htmlclean)
-* [webpack](http://webpack.github.io/) loader: [htmlclean-loader](https://github.com/anseki/htmlclean-loader)
+* [webpack](https://webpack.js.org/) loader: [htmlclean-loader](https://github.com/anseki/htmlclean-loader)
 
 Simple and safety HTML/SVG cleaner to minify without changing its structure.
 
