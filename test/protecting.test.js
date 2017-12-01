@@ -35,10 +35,20 @@ describe('Protecting', () => {
       expect(htmlclean('A  B  <  ?  php  C\n\nD    E  F')).to.equal('A B <  ?  php  C\n\nD    E  F');
     });
 
+    it('<jsp: ... > with attribute', () => {
+      expect(htmlclean('A  B  <jsp:  attr1   attr2 = ">   x  "  C\n\nD  >  E  \n\n F'))
+        .to.equal('A B <jsp:  attr1   attr2 = ">   x  "  C\n\nD  > E F');
+    });
+
     it('should unprotect xml', () => {
       expect(htmlclean('A  B  <?xml  C\n\nD  ?>  E  F')).to.equal('A B<?xml C D ?> E F');
       expect(htmlclean('A  B  < ?xml  C\n\nD  ? >  E  F')).to.equal('A B<?xml C D ?> E F');
       expect(htmlclean('A  B  <  ?  xml  C\n\nD  ?  >  E  F')).to.equal('A B<? xml C D ?> E F');
+    });
+
+    it('should unprotect xml with attribute', () => {
+      expect(htmlclean('A  B  <?xml  attr1   attr2 = "?>   <?php"  C\n\nD  ?>  E  F'))
+        .to.equal('A B<?xml attr1 attr2="?>   <?php" C D ?> E F'); // This is not PHP tag
     });
   });
 
@@ -81,11 +91,19 @@ describe('Protecting', () => {
       expect(htmlclean('A  B  < textarea ATTR=V>  C\n\nD  <  / textarea  >  E  F'))
         .to.equal('A B <textarea ATTR=V>  C\n\nD  </textarea> E F');
     });
+    it('<textarea> with attribute', () => {
+      expect(htmlclean('A  B  < textarea  attr1   attr2 = ">   x  "  X\n\nY  >  C\n\nD  <  / textarea  >  E  F'))
+        .to.equal('A B <textarea attr1 attr2=">   x  " X Y>  C\n\nD  </textarea> E F');
+    });
 
     // Allow nesting tags
     it('should protect nesting tags in <pre>', () => {
       expect(htmlclean('A  B  <  pre   ATTR  =  V>  C\n\nD  <  TAG   ATTR  =  V>  <  /  TAG><  /  pre>  E  F'))
         .to.equal('A B<pre ATTR=V>  C\n\nD  <TAG ATTR=V>  </TAG></pre> E F');
+    });
+    it('should protect nesting tags in <pre> with attribute', () => {
+      expect(htmlclean('A  B  <  pre   ATTR  =  V>  C\n\nD  <  TAG1   attr1  =  \'>  x  \'  X\n\nY  >    C1\n\nD1  <  TAG2   attr2  =  ">  x  "  X\n\nY  >    C1\n\nD1  <  /  TAG2>   <  /  TAG1><  /  pre>  E  F'))
+        .to.equal('A B<pre ATTR=V>  C\n\nD  <TAG1 attr1=\'>  x  \' X Y>    C1\n\nD1  <TAG2 attr2=">  x  " X Y>    C1\n\nD1  </TAG2>   </TAG1></pre> E F');
     });
     // Disallow nesting tags
     it('should ignore nesting tags in <textarea>', () => {

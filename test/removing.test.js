@@ -115,15 +115,63 @@ describe('Removing', () => {
       expect(htmlclean('<   span  ATTR = V > A </span> B')).to.equal(' <span ATTR=V>A</span> B');
     });
 
-    it('should protect quoted value', () => {
-      expect(htmlclean('<   span  ATTR =  "  A  \n\n B  " > A </span> B'))
-        .to.equal(' <span ATTR="  A  \n\n B  ">A</span> B');
+    it('should get attribute as invalid name', () => {
+      expect(htmlclean('<   span  AT>TR =   V CHK = "  X  Y  \n\n  Z "   >   A   </span> B'))
+        .to.equal('<span AT>TR = V CHK = " X Y Z " > A</span> B');
+        // Name: `AT`, `CHK...`: outside of tag
+    });
+
+    it('should get attributes without value', () => {
+      expect(htmlclean('<   span  ATTR1   ATTR2  ATTR3   >   A   </span> B'))
+        .to.equal(' <span ATTR1 ATTR2 ATTR3>A</span> B');
+    });
+
+    it('should protect quoted (") value', () => {
+      expect(htmlclean('<   span  ATTR =  "  A >  \n\n B  CHK = \'  X  Y  \n\n  Z \'  " > A </span> B'))
+        .to.equal(' <span ATTR="  A >  \n\n B  CHK = \'  X  Y  \n\n  Z \'  ">A</span> B');
+        // `CHK...`: inside of value
+    });
+
+    it('should protect quoted (\') value', () => {
+      expect(htmlclean('<   span  ATTR =  \'  A >  \n\n B  CHK = "  X  Y  \n\n  Z "  \' > A </span> B'))
+        .to.equal(' <span ATTR=\'  A >  \n\n B  CHK = "  X  Y  \n\n  Z "  \'>A</span> B');
+        // `CHK...`: inside of value
+    });
+
+    it('should protect mixed quoted value', () => {
+      expect(htmlclean('<   span  ATTR1 =  "  \'A1\' >  \n\n \'B\'  CHK = \'  X  Y  \n\n  Z \'  "' +
+          '  ATTR2 =  \'  "A2" >  \n\n "B"  CHK = "  X  Y  \n\n  Z "  \' > A </span> B'))
+        .to.equal(' <span ATTR1="  \'A1\' >  \n\n \'B\'  CHK = \'  X  Y  \n\n  Z \'  "' +
+          ' ATTR2=\'  "A2" >  \n\n "B"  CHK = "  X  Y  \n\n  Z "  \'>A</span> B');
+        // `CHK...`: inside of value
+    });
+
+    it('should protect value and restore quote', () => {
+      expect(htmlclean('<   span  ATTR1 =  "  \'  A1  \' >  \n\n \'B\'  "' +
+          '  ATTR2 =  \'  "  A2  " >  \n\n "B"   \'   NOVAL   > A <  /  span  > B'))
+        .to.equal(' <span ATTR1="  \'  A1  \' >  \n\n \'B\'  "' +
+        ' ATTR2=\'  "  A2  " >  \n\n "B"   \' NOVAL>A</span> B');
+    });
+
+    it('should not protect invalid tag', () => {
       // Invalid tag (can't get tag name)
-      expect(htmlclean('<   //span  ATTR =  "  A  \n\n B  " > A </span> B'))
-        .to.equal('<//span ATTR="  A  \n\n B  "> A</span> B');
-      // No attribute name
-      expect(htmlclean('<   span    "  A  \n\n B  " > A </span> B'))
-        .to.equal(' <span "  A  \n\n B  ">A</span> B');
+      expect(htmlclean('<   //span  ATTR =  "  A >  \n\n B  CHK = \'  X  Y  \n\n  Z \'  " > A </span> B'))
+        .to.equal('<//span ATTR=" A> B CHK = \' X Y Z \' " > A</span> B');
+    });
+
+    it('should not protect unquoted value', () => {
+      expect(htmlclean('<   span  ATTR =    A   \n\n B CHK = "  X  Y  \n\n  Z "   > A </span> B'))
+        .to.equal(' <span ATTR=A B CHK="  X  Y  \n\n  Z ">A</span> B'); // `CHK...`: inside of tag
+    });
+
+    it('should not protect unquoted and invalid value', () => {
+      expect(htmlclean('<   span  ATTR =    A >  \n\n B CHK = "  X  Y  \n\n  Z "    > A </span> B'))
+        .to.equal(' <span ATTR=A>B CHK = " X Y Z " > A</span> B'); // `CHK...`: outside of tag
+    });
+
+    it('should not protect invalid (no attribute name) quoted value', () => {
+      expect(htmlclean('<   span    "  A >  \n\n B CHK = \'  X  Y  \n\n  Z \'   " > A </span> B'))
+        .to.equal(' <span " A>B CHK = \' X Y Z \' " > A</span> B'); // `CHK...`: outside of tag
     });
 
     describe('path data', () => {
