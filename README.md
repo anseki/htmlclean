@@ -57,10 +57,10 @@ Following texts are protected (excluded from the [Removing](#removing) list).
 ## Usage
 
 ```js
-cleanHtml = htmlclean(sourceHtml[, options])
+cleanCode = htmlclean(sourceCode[, options])
 ```
 
-`require('htmlclean')` returns a Function. This Function accepts a HTML/SVG source, and returns a clean HTML/SVG source. You can specify an `options` Object for second argument (see [Options](#options)).
+`require('htmlclean')` returns a Function. This Function accepts a HTML/SVG source code, and returns a clean HTML/SVG source code. You can specify an `options` Object for second argument (see [Options](#options)).
 
 ```js
 var htmlclean = require('htmlclean');
@@ -86,7 +86,7 @@ Texts which are matched to this RegExp are protected in addition to the [Protect
 
 Texts which are matched to this RegExp are cleaned even if those text are included in the [Protecting](#protecting) list. Multiple RegExps can be specified via an Array.
 
-For example, a HTML source as template in `<script type="text/x-handlebars-template">` is cleaned via following code:
+For example, a HTML source code as template in `<script type="text/x-handlebars-template">` is cleaned via following code:
 
 ```js
 html = htmlclean(html, {
@@ -102,10 +102,10 @@ The `x-handlebars-template` in the `type` attribute above is a case of using Tem
 
 *Type:* Function
 
-This Function more edits the HTML/SVG source.  
-Protected texts are hidden from the HTML/SVG source, and the HTML/SVG source is passed to this Function. Therefore, this Function doesn't break the protected texts. The HTML/SVG source which returned from this Function is restored.
+This Function more edits the HTML/SVG source code.  
+Protected texts are hidden from the HTML/SVG source code, and the HTML/SVG source code is passed to this Function. Therefore, this Function doesn't break the protected texts. The HTML/SVG source code which returned from this Function is restored.
 
-*NOTE:* Markers `\fID\x07` (`\f` is "form feed" `\x0C` code, `\x07` is "bell", `ID` is number) are inserted to the HTML/SVG source instead of protected texts. This Function can remove those markers, but can't add new markers. (Invalid markers will be just removed.)
+*NOTE:* Markers `\fID\x07` (`\f` is "form feed" `\x0C` code, `\x07` is "bell", `ID` is number) are inserted to the HTML/SVG source code instead of protected texts. This Function can remove those markers, but can't add new markers. (Invalid markers will be just removed.)
 
 ### Example
 
@@ -141,7 +141,8 @@ htmlclean removes HTML/SVG comments that include SSI tags like `<!-- Info for ad
 ### htmlclean Job
 
 htmlclean never changes structure of document even if elements or attributes look like meaningless, because those might be used by your program, and the structuring is not job htmlclean should do. It should prevent unexpectedly breaking the data after all your efforts.  
-If you would like to enforce rules relating to code style, check out documents such as code style guide.
+If you would like to enforce rules relating to code style, check out documents such as code style guide.  
+Also, htmlclean supposes valid HTML code. Since htmlclean never checks the syntax, it might not work correctly when wrong document was passed. (Also: [Malformed Nested Tags, and Close Tags in Script](#malformed-nested-tags-and-close-tags-in-script))
 
 ## See Also
 
