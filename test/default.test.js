@@ -24,4 +24,39 @@ describe('Control flow', () => {
     expect(htmlclean('A  B  C  X  Y  Z', {edit: () => false})).to.equal(''); // empty string
   });
 
+  it('should remove invalid markers', () => {
+    var html = 'A  B  C  <span attr="  protected   text  "> e1 </span> ' +
+      '<textarea>  unprotected  \n\n  text  </textarea> X  Y  Z',
+      editHtml;
+    // Check normal flow
+    expect(htmlclean(html)).to.equal('A B C <span attr="  protected   text  ">e1</span> ' +
+      '<textarea>  unprotected  \n\n  text  </textarea> X Y Z'); // textarea is protected
+    expect(htmlclean(html, {
+      unprotect: /<textarea>[^]*?<\/textarea>/,
+      edit: src => (editHtml = src)
+    })).to.equal('A B C <span attr="  protected   text  ">e1</span> ' +
+      '<textarea>unprotected text</textarea> X Y Z'); // textarea is unprotected
+    expect(editHtml).to.equal('A B C <span attr="\f0\x07">e1</span> ' +
+      '<textarea>unprotected text</textarea> X Y Z'); // unprotect-marker was already restored
+
+    html = '  A  B  C  <span attr="  protected   text  1  "> e1 </span> ' +
+      ' X  Y  Z  <span attr="  protected   text  2  "> e2 </span>   D  E  F  ';
+    expect(htmlclean(html, {edit: src => (editHtml = src)}))
+      .to.equal('A B C <span attr="  protected   text  1  ">e1</span> ' +
+        'X Y Z <span attr="  protected   text  2  ">e2</span> D E F');
+    expect(editHtml).to.equal('A B C <span attr="\f0\x07">e1</span> ' +
+      'X Y Z <span attr="\f1\x07">e2</span> D E F'); // 2 markers
+
+    // Add markers
+    expect(htmlclean(html, {
+      edit: src => src +
+        ' [add1]\f0\x07[/add1] [add2]\f1\x07[/add2] [add3]\f0\x07[/add3] [add4]\f2\x07[/add4]'
+    })).to.equal('A B C <span attr="  protected   text  1  ">e1</span> ' +
+      'X Y Z <span attr="  protected   text  2  ">e2</span> D E F' +
+      ' [add1]  protected   text  1  [/add1]' +
+      ' [add2]  protected   text  2  [/add2]' +
+      ' [add3]  protected   text  1  [/add3]' +
+      ' [add4][/add4]');
+  });
+
 });

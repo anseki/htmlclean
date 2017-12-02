@@ -174,6 +174,12 @@ describe('Removing', () => {
         .to.equal(' <span " A>B CHK = \' X Y Z \' " > A</span> B'); // `CHK...`: outside of tag
     });
 
+    it('should not protect invalid (empty) unquoted value', () => {
+      // Invalid tag
+      expect(htmlclean('<   span  A   \n\n B CHK = "  X  Y  \n\n  Z "  ATTR =  > A </span> B'))
+        .to.equal(' <span A B CHK=" X Y Z " ATTR=>A</span> B');
+    });
+
     describe('path data', () => {
       it('should accept `path#d` as path data', () => {
         expect(htmlclean('A <path d="  M  0,  0  "/> B')).to.equal('A<path d="M0 0"/> B');
