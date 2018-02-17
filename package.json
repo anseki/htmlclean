@@ -15,6 +15,13 @@
     "lightweight"
   ],
   "main": "./lib/htmlclean.js",
+  "files": [
+    "lib/*.js",
+    "lib/*.json",
+    "examples",
+    "bower.json",
+    "LICENSE-MIT"
+  ],
   "engines": {
     "node": ">= 0.8.0"
   },
