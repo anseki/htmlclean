@@ -16,8 +16,7 @@
   ],
   "main": "./lib/htmlclean.js",
   "files": [
-    "lib/*.js",
-    "lib/*.json",
+    "lib/*.@(js|json)",
     "examples",
     "bower.json",
     "LICENSE-MIT"
