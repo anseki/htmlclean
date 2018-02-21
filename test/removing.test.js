@@ -208,6 +208,7 @@ describe('Removing', () => {
         expect(htmlclean('A <path d="V 00200"/> B')).to.equal('A<path d="V200"/> B'); // leading zero
         expect(htmlclean('A <path d="V -00200"/> B')).to.equal('A<path d="V-200"/> B'); // leading zero
         expect(htmlclean('A <path d="V200.00"/> B')).to.equal('A<path d="V200"/> B'); // trailing zero
+        expect(htmlclean('A <path d="V200.010"/> B')).to.equal('A<path d="V200.01"/> B'); // trailing zero 2
         expect(htmlclean('A <path d="V200."/> B')).to.equal('A<path d="V200"/> B'); //  no fraction
         expect(htmlclean('A <path d="V+0 H0"/> B')).to.equal('A<path d="V0H0"/> B');
         expect(htmlclean('A <path d="V-0."/> B')).to.equal('A<path d="V0"/> B');
