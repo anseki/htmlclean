@@ -18,8 +18,7 @@
   "files": [
     "lib/*.@(js|json)",
     "examples",
-    "bower.json",
-    "LICENSE-MIT"
+    "bower.json"
   ],
   "engines": {
     "node": ">= 0.8.0"
