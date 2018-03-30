@@ -67,7 +67,7 @@ describe('Protecting', () => {
     [
       '<![endif]>', '<![endif]-->', '<!--<![endif]-->',
       '< !  [endif]>', '< !  [endif]-->', '< !  --< !  [endif]-->',
-      '<![  endif]>', '<![  endif]-->', '<!--<![  endif]-->',
+      '<![  endif]>', '<![  endif]-->', '<!--<![  endif]-->'
     ].forEach(tag => {
       it(tag, () => {
         expect(htmlclean(`A  B  ${tag}`)).to.equal(`A B ${tag}`);
@@ -123,7 +123,7 @@ describe('Protecting', () => {
     expect(htmlclean('A  B  @  C\n\nD  %  E  F  @  X\n\nY    %', {protect: [/@[^]*?%/g]})) // array
       .to.equal('A B @  C\n\nD  % E F @  X\n\nY    %');
     expect(htmlclean('A  B  @1  C\n\nD  %1  E  F  @2  X\n\nY    %2  G  H @3  C\n\nD  %3  Z',
-        {protect: /@[13][^]*?%[13]/g}))
+      {protect: /@[13][^]*?%[13]/g}))
       .to.equal('A B @1  C\n\nD  %1 E F @2 X Y %2 G H @3  C\n\nD  %3 Z');
     expect(htmlclean('A  B  @  C\n\nD  %  E  F  @  X\n\nY    %', {protect: '@[^]*?%'})) // Ignore incorrect
       .to.equal('A B @ C D % E F @ X Y %');
@@ -133,11 +133,11 @@ describe('Protecting', () => {
     expect(htmlclean('A  B  <textarea>  C\n\nD  </textarea>  E  F'))
       .to.equal('A B <textarea>  C\n\nD  </textarea> E F');
     expect(htmlclean('A  B  <textarea>  C\n\nD  </textarea>  E  F',
-        {unprotect: /<textarea>[^]*?<\/textarea>/g}))
+      {unprotect: /<textarea>[^]*?<\/textarea>/g}))
       .to.equal('A B <textarea>C D</textarea> E F');
     expect(htmlclean('A', {unprotect: [/\d*$/g]})).to.equal('A'); // Accept empty string, and array
     expect(htmlclean('A  B  <textarea>  C\n\nD  </textarea>  E  F',
-        {unprotect: '<textarea>[^]*?<\/textarea>'})) // Ignore incorrect
+      {unprotect: '<textarea>[^]*?</textarea>'})) // Ignore incorrect
       .to.equal('A B <textarea>  C\n\nD  </textarea> E F');
   });
 

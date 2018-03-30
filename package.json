@@ -16,8 +16,8 @@
   ],
   "main": "./lib/htmlclean.js",
   "files": [
-    "lib/*.@(js|json)",
-    "examples",
+    "lib/!(.eslintrc.json)",
+    "examples/!(.eslintrc.json)",
     "bower.json"
   ],
   "engines": {

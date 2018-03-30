@@ -18,14 +18,14 @@ describe('Control flow', () => {
 
   it('should change the string with options.edit', () => {
     expect(htmlclean('A  B  C  X  Y  Z',
-        {edit: src => src.replace(/B C X/, '@')}))
+      {edit: src => src.replace(/B C X/, '@')}))
       .to.equal('A @ Y Z');
     expect(htmlclean('A  B  C  X  Y  Z', {edit: () => 1})).to.equal(''); // empty string
     expect(htmlclean('A  B  C  X  Y  Z', {edit: () => false})).to.equal(''); // empty string
   });
 
   it('should remove invalid markers', () => {
-    var html = 'A  B  C  <span attr="  protected   text  "> e1 </span> ' +
+    let html = 'A  B  C  <span attr="  protected   text  "> e1 </span> ' +
       '<textarea>  unprotected  \n\n  text  </textarea> X  Y  Z',
       editHtml;
     // Check normal flow
