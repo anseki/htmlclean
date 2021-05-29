@@ -25,12 +25,10 @@
   },
   "devDependencies": {
     "chai": "^4.1.2",
-    "istanbul": "^0.4.5",
     "mocha": "^5.2.0"
   },
   "scripts": {
-    "test": "mocha",
-    "cover": "istanbul cover node_modules/mocha/bin/_mocha"
+    "test": "mocha"
   },
   "homepage": "https://github.com/anseki/htmlclean",
   "repository": {
